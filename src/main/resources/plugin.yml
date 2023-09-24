@@ -1,0 +1,19 @@
+name: FlexPvP
+version: 4.0
+api-version: 1.19
+description: FlexPlex PvP Plugin
+author: Jonkke
+website: flexplex.fi
+main: fi.flexplex.pvp.Main
+depend: [FlexCore]
+
+
+commands:
+  location:
+  ffa:
+  cst:
+  spawn:
+  duelsinvite:
+  advancedduelsinvite:
+  duelsaccept:
+  rematch:

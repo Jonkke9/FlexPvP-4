@@ -1,0 +1,209 @@
+package fi.flexplex.pvp.loader;
+
+import fi.flexplex.pvp.Main;
+import fi.flexplex.pvp.game.arena.Arena;
+import fi.flexplex.pvp.game.arena.ArenaManager;
+import fi.flexplex.pvp.game.arena.DuelArenaTemplate;
+import fi.flexplex.pvp.game.kit.Kit;
+
+import fi.flexplex.pvp.game.arena.FfaArena;
+import fi.flexplex.pvp.game.arena.Lobby;
+import fi.flexplex.pvp.game.kit.KitManager;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+
+public final class ArenaLoader {
+	//TODO: clean
+	public static void loadAllArenas() {
+		final List<YamlConfiguration> configs = ConfigLoader.loadConfigFilesInDirectory(new File(Main.getInstance().getDataFolder(), "arenas"));
+		for (final YamlConfiguration config : configs) {
+
+			final String name = config.getString("name").toLowerCase();
+			if (name == null) {
+				Main.getInstance().getLogger().severe("could not load arena: incorrect name");
+				continue;
+			}
+			final String type = config.getString("type").toLowerCase();
+
+			if (type == null) {
+				Main.getInstance().getLogger().severe("could not load arena " + name + ": invalid type");
+				continue;
+			}
+
+			if (ArenaManager.hasArena(name)) {
+				Main.getInstance().getLogger().severe("Arena by name: " + name + " already exists");
+				continue;
+			}
+
+			final Location bounds1 = parseLocation(config.getString("bounds1"));
+			final Location bounds2 = parseLocation(config.getString("bounds2"));
+
+
+			if (bounds1 == null || bounds2 == null) {
+				Main.getInstance().getLogger().severe("could not load arena " + name + ": invalid bounds");
+				continue;
+			}
+			Arena arena = null;
+
+			switch (type) {
+				case "ffa":
+					ArenaManager.addArena(loadFfaArena(config, name, bounds1, bounds2));
+					break;
+				case "lobby":
+					ArenaManager.addArena(loadLobby(config, name, bounds1, bounds2));
+					break;
+				case  "duel":
+					loadDuelArenaTemplate(config, name, bounds1, bounds2);
+					break;
+				default:
+					Main.getInstance().getLogger().severe("could not load arena " + name + ": invalid type");
+			}
+
+		}
+		if (ArenaManager.getLobby() == null) {
+			Main.getInstance().getLogger().severe("No lobby arena loaded: this will cause plugin to not work");
+		}
+	}
+
+
+	private static Lobby loadLobby(final YamlConfiguration config, final String name, final Location bounds1, final Location bounds2) {
+		final Location spawn = parseLocation(config.getString("spawn-loc"));
+		if (spawn == null) {
+			Main.getInstance().getLogger().severe("could not load arena " + name + "invalid spawn location");
+			return null;
+		}
+
+		final ConfigurationSection section = config.getConfigurationSection("kit-selector-locations");
+		final HashMap<String, Location> kitSelectorLocations = new HashMap<>();
+		if (section != null) {
+			for (final String key : section.getKeys(false)) {
+				if (KitManager.kitExists(key.toLowerCase())) {
+					final Location loc = parseLocation(section.getString(key));
+					if (loc != null) {
+						kitSelectorLocations.putIfAbsent(key.toLowerCase(), loc);
+					}
+				}
+			}
+		}
+		final Lobby lobby = new Lobby(name, bounds1, bounds2, spawn, kitSelectorLocations);
+
+		if (ArenaManager.getLobby() != null) {
+			return null;
+		}
+		ArenaManager.setLobby(lobby);
+
+		return lobby;
+	}
+
+	private static FfaArena loadFfaArena(final YamlConfiguration config, final String name, final Location bounds1, final Location bounds2) {
+
+		final List<Kit> allowedKits = getKits(config);
+		if (allowedKits.isEmpty()) {
+			allowedKits.addAll(KitManager.getKits());
+		}
+		final List<Location> spawnLocations = new ArrayList<Location>();
+
+		for (final String locRaw : config.getStringList("spawn-locations")) {
+			final Location loc = parseLocation(locRaw);
+			if (loc != null) {
+				spawnLocations.add(loc);
+			}
+		}
+		if (spawnLocations.isEmpty()) {
+			Main.getInstance().getLogger().severe("could not load arena " + name + ": ffa-arena must have at least one spawning location");
+			return null;
+		}
+
+		final FfaArena ffaArena = new FfaArena(name, bounds1, bounds2, allowedKits, spawnLocations);
+
+		if (config.getBoolean("primary")) {
+			ArenaManager.setActiveFfaArena(ffaArena);
+			ffaArena.activate(40);
+		}
+		return ffaArena;
+	}
+
+	private static void loadDuelArenaTemplate(final YamlConfiguration config, final String name, final Location bounds1, final Location bounds2) {
+		final ConfigurationSection section = config.getConfigurationSection("locations");
+		final List<Location> locations = new ArrayList<>();
+		int index = 1;
+		while (true) {
+			final String locationString = section.getString("loc" + String.valueOf(index));
+
+			if (locationString == null) {
+				break;
+			}
+
+			final Location location = parseLocation(locationString);
+
+			if (location != null) {
+				locations.add(location);
+			}
+			index++;
+		}
+		final Set<UUID> builders = new HashSet<>();
+		final DuelArenaTemplate template = new DuelArenaTemplate(name, bounds1, bounds2, builders, locations.toArray(new Location[locations.size()]), null);
+		ArenaManager.addDuelArenaTemplate(template);
+	}
+
+	private static List<Kit> getKits(final YamlConfiguration configuration) {
+		final List<Kit> kits = new ArrayList<>();
+		if (configuration.isList("allowed-kits")) {
+			for (final String kitName : configuration.getStringList("allowed-kits")) {
+				final Kit kit = KitManager.getKit(kitName);
+				if (kit != null) {
+					kits.add(kit);
+				}
+			}
+		}
+		if (kits.isEmpty()) {
+			kits.addAll(KitManager.getKits());
+		}
+		return kits;
+	}
+
+
+	private static Location parseLocation(final String value) {
+		if (value == null) {
+			return null;
+		}
+		try {
+			final String[] parts = value.split(" ");
+			if (parts.length == 4) {
+				return new Location(
+						Objects.requireNonNull(
+								Bukkit.getWorld(parts[0]), "unknown world '" + parts[0] + "'"
+						),
+						Double.parseDouble(parts[1]),
+						Double.parseDouble(parts[2]),
+						Double.parseDouble(parts[3])
+				);
+			} else if (parts.length == 6) {
+				return new Location(
+						Objects.requireNonNull(
+								Bukkit.getWorld(parts[0]), "unknown world '" + parts[0] + "'"
+						),
+						Double.parseDouble(parts[1]),
+						Double.parseDouble(parts[2]),
+						Double.parseDouble(parts[3]),
+						Float.parseFloat(parts[4]),
+						Float.parseFloat(parts[5])
+				);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}
