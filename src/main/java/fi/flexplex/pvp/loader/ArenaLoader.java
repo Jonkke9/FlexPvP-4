@@ -108,7 +108,7 @@ public final class ArenaLoader {
 
 	private static FfaArena loadFfaArena(final YamlConfiguration config, final String name, final Location bounds1, final Location bounds2) {
 
-		final List<Kit> allowedKits = getKits(config);
+		final List<Kit> allowedKits = KitManager.getFFAKits();
 		if (allowedKits.isEmpty()) {
 			allowedKits.addAll(KitManager.getKits());
 		}
@@ -156,23 +156,6 @@ public final class ArenaLoader {
 		final DuelArenaTemplate template = new DuelArenaTemplate(name, bounds1, bounds2, builders, locations.toArray(new Location[locations.size()]), null);
 		ArenaManager.addDuelArenaTemplate(template);
 	}
-
-	private static List<Kit> getKits(final YamlConfiguration configuration) {
-		final List<Kit> kits = new ArrayList<>();
-		if (configuration.isList("allowed-kits")) {
-			for (final String kitName : configuration.getStringList("allowed-kits")) {
-				final Kit kit = KitManager.getKit(kitName);
-				if (kit != null) {
-					kits.add(kit);
-				}
-			}
-		}
-		if (kits.isEmpty()) {
-			kits.addAll(KitManager.getKits());
-		}
-		return kits;
-	}
-
 
 	private static Location parseLocation(final String value) {
 		if (value == null) {
