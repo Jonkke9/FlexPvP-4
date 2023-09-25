@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,10 +58,17 @@ public final class Kit {
 	}
 
 	public ItemStack getIcon(final CommandSender sender) {
-		//TODO: finish later
 		final ItemStack icon = new ItemStack(iconMat);
 		final ItemMeta iconMeta = icon.getItemMeta();
 		iconMeta.displayName(Component.text("§6" + Language.getStringMessage(sender,displayNameKey)));
+
+		final List<Component> lore = new ArrayList<>();
+
+		for (final String s : descriptionLineKeys) {
+			lore.add(Language.getMessage(sender, s));
+		}
+
+		iconMeta.lore(lore);
 		icon.setItemMeta(iconMeta);
 		return icon;
 	}
@@ -86,6 +94,10 @@ public final class Kit {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDisplayNameKey() {
+		return displayNameKey;
 	}
 
 	public int getSlot() {

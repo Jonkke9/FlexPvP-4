@@ -37,14 +37,21 @@ PVP_DUELS_REMATCH_CANT_BE_SENT:         "§c§lError §c>> §7Cant sent rematch 
 PVP_DUELS_CANCEL_YOU:                   "§6§lFlexPlex §6>> §eYou ended the duel."
 PVP_DUELS_CANCEL_OTHER:                 "§6§lFlexPlex §6>> §eThe duel was ended by your opponent."
 
+PVP_DUELS_INVITE_INFO:                  "§6§lInfo"
+PVP_DUELS_INVITE_ARENA:                 "§eArena §7%arg0%"
+PVP_DUELS_INVITE_KITS:                  "§e Allowed kits:"
+PVP_DUELS_INVITE_KIT:                   "§7 - %arg0%"
+PVP_DUELS_INVITE_CLICK:                 "§6§lClick to accept"
+
+PVP_ARENA_BUILDERS:                     "§6Builders"
+PVP_ARENA_BUILDER:                      "§7- %arg0%"
+
+PVP_DUELS_MENU_NEXT:                    "§6Next"
+PVP_DUELS_MENU_ARENA:                   "§6Choose an arena"
+PVP_DUELS_MENU_SELECT_KITS:             "§6Select allowed kits"
+
 PVP_DUELS_END:                           "                §c§lStop"
 PVP_DUELS_REMATCH:                       "      §a§lRematch"
-
-PVP_DUELS_TYPE_NORMAL:                  "§6§lKnight"
-PVP_DUELS_TYPE_BEAST:                   "§6§lBeast"
-PVP_DUELS_TYPE_AXE:                     "§6§lAxe"
-PVP_DUELS_TYPE_SUMO:                    "§6§lSumo"
-PVP_DUELS_TYPE_CUSTOM:                  "§6§lCustom"
 
 PVP_MENU_KIT_SELECTOR:                  "§6%Choose a kit"
 
@@ -85,3 +92,8 @@ KIT_VIKING_SPEC2:                       "- Fishing rod"
 KIT_HUNTER:                             "Hunter"
 KIT_HUNTER_SPEC1:                       "- Crossbow"
 KIT_HUNTER_SPEC2:                       "- Iron sword"
+
+PVP_ARENA_DUELS_HALL:                   "Grand Hall"
+PVP_ARENA_DUELS_JAPAN:                  "Japan"
+PVP_ARENA_DUELS_SAUNA:                  "Behind The Sauna"
+PVP_ARENA_DUELS_GENERIC:                "Arena"

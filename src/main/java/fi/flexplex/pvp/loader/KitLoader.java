@@ -46,7 +46,7 @@ public final class KitLoader {
 			}
 
 			final List<String> descriptionLineKeys = new ArrayList<>();
-			descriptionLineKeys.addAll(config.getStringList("description-keys"));
+			descriptionLineKeys.addAll(config.getStringList("description-lines"));
 
 
 			Material displayMaterial;
@@ -55,6 +55,7 @@ public final class KitLoader {
 				displayMaterial = Material.valueOf(config.getString("displaymaterial"));
 			} catch (IllegalArgumentException | NullPointerException e) {
 				displayMaterial = Material.IRON_SWORD;
+				e.printStackTrace();
 			}
 
 			config.addDefault("ffa-kit", false);

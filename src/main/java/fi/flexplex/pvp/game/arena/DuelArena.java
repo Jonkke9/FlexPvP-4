@@ -11,13 +11,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public final class DuelArena extends PvpArena{
 
 	private final Location[] locations;
-
+	private final DuelArenaTemplate template;
 	private Duel activeDuel;
 
 	private boolean ready;
 
-	public DuelArena(final String name, final Location bounds1, final Location bounds2, final Location[] locations) {
+	public DuelArena(final String name, final Location bounds1, final Location bounds2, final Location[] locations, final DuelArenaTemplate template) {
 		super(name, bounds1, bounds2);
+		this.template = template;
 		this.locations = locations;
 		activeDuel = null;
 		ready = false;
@@ -95,6 +96,10 @@ public final class DuelArena extends PvpArena{
 		}
 
 		return activeDuel.getSettings().hunger();
+	}
+
+	public DuelArenaTemplate getTemplate() {
+		return template;
 	}
 
 }

@@ -11,11 +11,13 @@ import fi.flexplex.pvp.game.arena.Lobby;
 import fi.flexplex.pvp.game.kit.KitManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -152,8 +154,36 @@ public final class ArenaLoader {
 			}
 			index++;
 		}
-		final Set<UUID> builders = new HashSet<>();
-		final DuelArenaTemplate template = new DuelArenaTemplate(name, bounds1, bounds2, builders, locations.toArray(new Location[locations.size()]), null);
+
+
+		Material displayMaterial;
+
+		try {
+			displayMaterial = Material.valueOf(config.getString("displaymaterial"));
+		} catch (IllegalArgumentException | NullPointerException e) {
+			displayMaterial = Material.GRASS_BLOCK;
+			e.printStackTrace();
+		}
+
+		final List<UUID> builders = new ArrayList<>();
+		final List<String> buildersRaw = config.getStringList("builders");
+
+		if (! buildersRaw.isEmpty()) {
+			for (String builder : buildersRaw) {
+				// Check for uuid
+				if (builder.length() == 36) {
+					try {
+						builders.add(UUID.fromString(builder));
+						// If the above code didn't throw any exceptions, it was a valid uuid.
+						continue; // Skip to the next
+					} catch (IllegalArgumentException e) {}
+				}
+			}
+		}
+
+		config.addDefault("name-key", "PVP_ARENA_DUELS_GENERIC");
+		final String nameKey = config.getString("name-key");
+		final DuelArenaTemplate template = new DuelArenaTemplate(name, bounds1, bounds2, builders, locations.toArray(new Location[locations.size()]), nameKey, displayMaterial);
 		ArenaManager.addDuelArenaTemplate(template);
 	}
 

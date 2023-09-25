@@ -21,7 +21,6 @@ public final class LocationToolCmd implements CommandExecutor {
 		}
 		final Player player = (Player) sender;
 
-		//Todo: permission check
 		if (!player.isOp()) {
 			Language.sendMessage(player, "NO_PERMISSIONS_TO_COMMAND");
 			return false;

@@ -37,14 +37,21 @@ PVP_DUELS_REMATCH_CANT_BE_SENT:         "§c§lVirhe §c>> §7Et voi lähettää
 PVP_DUELS_CANCEL_YOU:                   "§6§lFlexPlex §6>> §eSinä keskeytit kaksintaistelun."
 PVP_DUELS_CANCEL_OTHER:                 "§6§lFlexPlex §6>> §eVastustajasi keskeytti kaksintaistelun."
 
+PVP_DUELS_INVITE_INFO:                  "§6§lLisätiedot"
+PVP_DUELS_INVITE_ARENA:                 "§eAreena §7%arg0%"
+PVP_DUELS_INVITE_KITS:                  "§e Sallitut kitit:"
+PVP_DUELS_INVITE_KIT:                   "§7 - %arg0%"
+PVP_DUELS_INVITE_CLICK:                 "§6§lPaina hyväksyäksesi"
+
+PVP_ARENA_BUILDERS:                     "§6Rakentajat"
+PVP_ARENA_BUILDER:                      "§7- %arg0%"
+
+PVP_DUELS_MENU_NEXT:                    "§6Seuraava"
+PVP_DUELS_MENU_ARENA:                   "§6Valitse areena"
+PVP_DUELS_MENU_SELECT_KITS:             "§6Valitse sallitut areenat"
+
 PVP_DUELS_END:                           "        §c§lLopeta"
 PVP_DUELS_REMATCH:                       "       §a§lUusintaottelu"
-
-PVP_DUELS_TYPE_NORMAL:                  "§6§lRitari"
-PVP_DUELS_TYPE_BEAST:                   "§6§lBeast"
-PVP_DUELS_TYPE_AXE:                     "§6§lKirves"
-PVP_DUELS_TYPE_SUMO:                    "§6§lSumo"
-PVP_DUELS_TYPE_CUSTOM:                  "§6§lMukautettu"
 
 PVP_MENU_KIT_SELECTOR:                  "§6Valitse kit"
 
@@ -85,3 +92,8 @@ KIT_VIKING_SPEC2:                       "- Onki"
 KIT_HUNTER:                             "Metsästäjä"
 KIT_HUNTER_SPEC1:                       "- Varsijousi"
 KIT_HUNTER_SPEC2:                       "- Rautamiekka"
+
+PVP_ARENA_DUELS_HALL:                   "Suuri Sali"
+PVP_ARENA_DUELS_JAPAN:                  "Japani"
+PVP_ARENA_DUELS_SAUNA:                  "Saunan takana"
+PVP_ARENA_DUELS_GENERIC:                "Areena"

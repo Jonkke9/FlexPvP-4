@@ -1,0 +1,21 @@
+#unique to every arena
+name: "sauna"
+name-key: "PVP_ARENA_DUELS_SAUNA"
+type: "duel"
+
+displaymaterial: FURNACE
+
+bounds1: "world -4 45 220"
+bounds2: "world 70 79 143"
+
+
+builders:
+  - "a98dd48e-0e1c-456b-b5f3-fb309fcc2be2" # Janski14
+  - "8bab0bb7-09eb-4b68-bbcd-30d23df8f54e" # TaivaanLusikka
+  
+#how many instances of map will be created on start
+amount: 2
+
+locations:
+  loc1: "world 14.5 52.0 191.5 -90 0"
+  loc2: "world 49.5 52.0 191.5 90 0"

@@ -1,9 +1,6 @@
 package fi.flexplex.pvp.menus;
 
-import fi.flexplex.pvp.game.arena.ArenaManager;
-import fi.flexplex.pvp.game.duel.DuelInvite;
-import fi.flexplex.pvp.game.duel.DuelSettings;
-import fi.flexplex.pvp.game.duel.Duels;
+import fi.flexplex.core.api.Language;
 import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.kit.KitManager;
 import org.bukkit.Material;
@@ -21,7 +18,7 @@ public class AdvancedDuelsKitSelector extends Menu {
 	final HashMap<Kit, Boolean> kits = new HashMap<>();
 
 	public AdvancedDuelsKitSelector(final Player player, final Player target) {
-		super(player, 54, "", null);
+		super(player, 54, "PVP_DUELS_MENU_SELECT_KITS", null);
 
 
 		for (final Kit kit : KitManager.getKits()) {
@@ -45,6 +42,7 @@ public class AdvancedDuelsKitSelector extends Menu {
 		}
 
 		final ItemStack arrow = new ItemStack(Material.ARROW);
+		arrow.getItemMeta().displayName(Language.getMessage(player, "PVP_DUELS_MENU_NEXT"));
 		setItem(arrow, 53, (type) -> {
 			final List<Kit> allowedKits = new ArrayList<>();
 
@@ -58,8 +56,9 @@ public class AdvancedDuelsKitSelector extends Menu {
 				allowedKits.addAll(KitManager.getFFAKits());
 			}
 
-			Duels.sendInvite(new DuelInvite(player, target, allowedKits, DuelSettings.defaultSettings(), ArenaManager.randomDuelArena()));
+
 			player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
+			new DuelsArenaSelector(player, target, allowedKits);
 
 		});
 		open();

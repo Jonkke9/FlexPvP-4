@@ -4,7 +4,10 @@ import fi.flexplex.core.api.FlexPlayer;
 import fi.flexplex.core.api.Language;
 import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.Main;
+import fi.flexplex.pvp.game.kit.Kit;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -13,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class Duels {
@@ -108,10 +112,27 @@ public final class Duels {
 	}
 
 	private static void sendInviteMessage(final DuelInvite invite) {
+		final Player player = invite.getTo();
+
+		final List<Component> lines = new ArrayList<>();
+
+		lines.add(Language.getMessage(player, "PVP_DUELS_INVITE_INFO"));
+		lines.add(Component.text(""));
+		lines.add(Language.getMessage(player, "PVP_DUELS_INVITE_ARENA", Language.getStringMessage(player, invite.getArena().getTemplate().getDisplayNameKey())));
+		lines.add(Component.text(""));
+		lines.add(Language.getMessage(player, "PVP_DUELS_INVITE_KITS"));
+
+
+		for (final Kit kit : invite.getKits()) {
+			lines.add(Language.getMessage(player, "PVP_DUELS_INVITE_KIT", Language.getStringMessage(player, kit.getDisplayNameKey())));
+		}
+
+		lines.add(Component.text(""));
+		lines.add(Language.getMessage(player, "PVP_DUELS_INVITE_CLICK"));
 
 		final TextComponent component = Component.text()
-				.content(Language.getStringMessage(invite.getTo(), "PVP_DUELS_INVITE_RECEIVED", Permissions.getLegacyDisplayName(invite.getFrom())))
-				.hoverEvent(HoverEvent.showText(Component.text(123)))
+				.content(Language.getStringMessage(player, "PVP_DUELS_INVITE_RECEIVED", Permissions.getLegacyDisplayName(invite.getFrom())))
+				.hoverEvent(HoverEvent.showText(Component.join(JoinConfiguration.newlines(), lines)))
 				.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND,"/duelsaccept " + invite.getFrom().getName()))
 				.build();
 		invite.getTo().sendMessage(component);

@@ -1,12 +1,21 @@
 package fi.flexplex.pvp.game.arena;
 
+import fi.flexplex.core.api.Language;
+import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.misc.BlockDataLocation;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,7 +25,8 @@ public final class DuelArenaTemplate {
 	private final int slices;
 	private final String name;
 	final int sizeX, sizeY, sizeZ;
-	private final Set<UUID> builders;
+	private final String displayNameKey;
+	private final List<String> builderNames;
 	private final Material displayMaterial;
 	private final Set<BlockDataLocation> blocks;
 	private final Location[] normalizedLocations;
@@ -24,8 +34,9 @@ public final class DuelArenaTemplate {
 	public DuelArenaTemplate(final String name,
 							 final Location loc1,
 							 final Location loc2,
-							 final Set<UUID> builders,
+							 final List<UUID> builders,
 							 final Location[] locations,
+							 final String displayNameKey,
 							 final Material displayMaterial) {
 
 		final World world = loc1.getWorld();
@@ -66,9 +77,20 @@ public final class DuelArenaTemplate {
 
 		this.normalizedLocations = normalizedLocations;
 		this.displayMaterial = displayMaterial;
-		this.builders = builders;
+		this.displayNameKey = displayNameKey;
+		this.builderNames = new ArrayList<>();
 		this.blocks = blocks1;
 		this.name = name;
+
+		for (final UUID uuid : builders) {
+			Permissions.getLegacyDisplayName(Bukkit.getOfflinePlayer(uuid)).whenCompleteAsync((builderName, e)-> {
+				if (e != null) {
+					e.printStackTrace();
+				}
+				this.builderNames.add(builderName);
+			});
+
+		}
 	}
 
 	protected DuelArena buildArena(final Location bounds1) {
@@ -90,7 +112,7 @@ public final class DuelArenaTemplate {
 			locations[i] = loc.add(bounds1);
 		}
 
-		final DuelArena arena = new DuelArena(name, bounds1, bounds2, locations);
+		final DuelArena arena = new DuelArena(name, bounds1, bounds2, locations, this);
 		return arena;
 	}
 
@@ -106,6 +128,34 @@ public final class DuelArenaTemplate {
 	public Set<BlockDataLocation> getBlocks() {
 		return this.blocks;
 	}
+
+	public Material getDisplayMaterial() {
+		return displayMaterial;
+	}
+
+	public String getDisplayNameKey() {
+		return displayNameKey;
+	}
+
+	public ItemStack getIcon(final CommandSender sender) {
+		final ItemStack icon = new ItemStack(displayMaterial);
+		final ItemMeta meta = icon.getItemMeta();
+
+		meta.displayName(Language.getMessage(sender, displayNameKey));
+
+		if (builderNames.size() != 0) {
+			final List<Component> lore = new ArrayList<>();
+			lore.add(Language.getMessage(sender, "PVP_ARENA_BUILDERS"));
+
+			for (final String name : builderNames) {
+				lore.add(Language.getMessage(sender, "PVP_ARENA_BUILDER", name));
+			}
+		}
+
+		icon.setItemMeta(meta);
+		return icon;
+	}
+
 }
 
 

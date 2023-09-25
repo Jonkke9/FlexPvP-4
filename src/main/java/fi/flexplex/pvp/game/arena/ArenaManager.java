@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -95,10 +96,28 @@ public class ArenaManager {
 		return buildArena(new ArrayList<>(TEMPLATES.values()).get(new Random().nextInt(TEMPLATES.values().size())));
 	}
 
+	public static DuelArena randomDuelArena(final List<DuelArenaTemplate> allowed) {
+		if (allowed.size() == 0) {
+			return randomDuelArena();
+		}
+
+		final DuelArenaTemplate template = allowed.get(new Random().nextInt(allowed.size()));
+
+		for (final Arena arena : ARENAS.values()) {
+			if (arena instanceof final DuelArena duelArena) {
+				if (duelArena.isFree()) {
+					if (duelArena.getTemplate() == template);
+					return duelArena;
+				}
+			}
+		}
+		return buildArena(template);
+	}
+
 	public static DuelArena buildArena(final DuelArenaTemplate template) {
 		final Location loc = SPIRAL.next();
 		final DuelArena arena = template.buildArena(loc);
-		final DuelArenaBuildTask task = new  DuelArenaBuildTask(template, loc, arena);
+		final DuelArenaBuildTask task = new DuelArenaBuildTask(template, loc, arena);
 		task.runTaskTimer(Main.getInstance(), getBuildTaskDelay(), 0l);
 		BUILD_TASKS.add(task);
 		ARENAS.putIfAbsent(arena.getName(), arena);
@@ -113,7 +132,7 @@ public class ArenaManager {
 
 	protected static int getBuildTaskDelay() {
 		int delay = 0;
-		for (final  DuelArenaBuildTask task : BUILD_TASKS) {
+		for (final DuelArenaBuildTask task : BUILD_TASKS) {
 			delay += task.getDuration();
 		}
 		return delay;
@@ -128,6 +147,10 @@ public class ArenaManager {
 			final DuelArena arena = buildArena(template);
 			ARENAS.putIfAbsent(arena.getName(), arena);
 		}
+	}
+
+	public static Collection<DuelArenaTemplate> getAllDuelArenaTemplates() {
+		return TEMPLATES.values();
 	}
 
 }

@@ -1,18 +1,28 @@
 package fi.flexplex.pvp.game.arena;
 
 import fi.flexplex.core.api.Language;
+import fi.flexplex.core.api.Permissions;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public abstract class Arena {
 
 	protected final String name;
-	protected final Set<Player> players = new HashSet<Player>();
+	protected final Set<Player> players;
 	protected final Location bounds1;
 	protected final Location bounds2;
 	protected final GameMode gameMode = GameMode.ADVENTURE;
@@ -21,6 +31,7 @@ public abstract class Arena {
 		this.name = name;
 		this.bounds1 = bounds1;
 		this.bounds2 = bounds2;
+		this.players = new HashSet<>();
 	}
 
 	public void broadcast(final String key, final String... args) {
