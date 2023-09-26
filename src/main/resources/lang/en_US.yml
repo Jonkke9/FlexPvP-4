@@ -5,6 +5,11 @@ PVP_KIT_NOT_ALLOWED:                    "§c§lError §c>> §7Kit §c%arg0% §7I
 
 PVP_ARENA_CHANGING:                     ""
 
+PVP_TIMEFRAME_CHANGED:                  "§6§lFlexPlex §6>> §eShowing statistics from timeframe §7%arg0%§e."
+PVP_TIMEFRAME_ALL_TIME:                 "all time"
+PVP_TIMEFRAME_MONTHLY:                  "this month"
+PVP_TIMEFRAME_THIS_SESSION:             "this session"
+
 PVP_FFA_SCOREBOARD_TITLE:               "§6§lFlexPvP"
 PVP_FFA_SCOREBOARD_KILLS:               "§6Kills: §e%arg0%"
 PVP_FFA_SCOREBOARD_DEATHS:              "§6Deaths: §e%arg0%"

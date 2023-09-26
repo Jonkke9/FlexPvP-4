@@ -17,7 +17,7 @@ public final class WorldUtils {
 	private static int s_WorldCounter = 1;
 
 	public static World createEmptyWorld() {
-		final WorldCreator creator = WorldCreator.name(System.currentTimeMillis() + "-" + s_WorldCounter++
+		final WorldCreator creator = WorldCreator.name("allocations/" + System.currentTimeMillis() + "-" + s_WorldCounter++
 		);
 
 		creator.environment(World.Environment.NORMAL);

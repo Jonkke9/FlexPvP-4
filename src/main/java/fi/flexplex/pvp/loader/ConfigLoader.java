@@ -27,7 +27,7 @@ public final class ConfigLoader {
 	}
 
 	public static YamlConfiguration loadConfig(final File file) {
-		if (file.getName().endsWith(".yml") || file.getName().endsWith("yaml")) {
+		if (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) {
 			try {
 				return YamlConfiguration.loadConfiguration(file);
 			} catch (Exception e) {

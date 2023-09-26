@@ -43,9 +43,8 @@ public final class DamageListener implements Listener {
 			data.changeArena(ArenaManager.getLobby(),true);
 			return;
 		}
-
 		if (data.getArena() == ArenaManager.getFfaArena()) {
-			PvpScoreboard.updateFFABellowNameScoreboard(player);
+			PvpScoreboard.updateFFABellowNameScoreboard(player, (int) (player.getHealth() - event.getFinalDamage()));
 		}
 
 		Player playerDamager;

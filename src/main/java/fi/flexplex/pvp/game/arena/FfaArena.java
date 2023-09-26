@@ -145,7 +145,7 @@ public final class FfaArena extends PvpArena {
 					killer.setHealth(max);
 				}
 
-				PvpScoreboard.updateFFABellowNameScoreboard(killer);
+				PvpScoreboard.updateFFABellowNameScoreboard(killer, (int) killer.getHealth());
 
 				//Streak break message
 				if (victimStreak >= 10) {

@@ -5,6 +5,11 @@ PVP_KIT_NOT_ALLOWED:                    "§c§lVirhe §c>> §7Kitti %arg0% ei ol
 
 PVP_ARENA_CHANGING:                     ""
 
+PVP_TIMEFRAME_CHANGED:                  "§6§lFlexPlex §6>> §eNäytetään tilastot ajalta §7%arg0%§e."
+PVP_TIMEFRAME_ALL_TIME:                 "ikuinen"
+PVP_TIMEFRAME_MONTHLY:                  "tämä kuukausi"
+PVP_TIMEFRAME_THIS_SESSION:             "tämä kerta"
+
 PVP_FFA_SCOREBOARD_TITLE:               "§6§lFlexPvP"
 PVP_FFA_SCOREBOARD_KILLS:               "§6Tapot: §e%arg0%"
 PVP_FFA_SCOREBOARD_DEATHS:              "§6Kuolemat: §e%arg0%"

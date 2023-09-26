@@ -25,7 +25,7 @@ public final class PvpScoreboard {
 
 	public static void sendFFASidebarScoreboard(final Player p) {
 		final PlayerData data = PlayerDataManager.getPlayerData(p);
-		final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "FFA_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a("FlexPvP"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+		final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "FFA_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
 		obj.a(IChatBaseComponent.a(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TITLE")));
 		sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 1));
 		sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 0));
@@ -47,15 +47,14 @@ public final class PvpScoreboard {
 		sendPacket(p, new PacketPlayOutScoreboardDisplayObjective(2, obj));
 
 		for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
-			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", player.getName(), (int) p.getHealth()));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", p.getName(), (int) p.getHealth()));
+			sendPacket(p,new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", player.getName(), (int) player.getHealth()));
 		}
 	}
 
-	public static void updateFFABellowNameScoreboard(final Player p) {
-		final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "FFA_BELLOW_NAME", IScoreboardCriteria.a, IChatBaseComponent.a("§c❤"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
-
+	public static void updateFFABellowNameScoreboard(final Player p, final int health) {
 		for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
-			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", player.getName(), (int) player.getHealth()));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", p.getName(), health));
 		}
 	}
 
@@ -79,9 +78,9 @@ public final class PvpScoreboard {
 	}
 
 	public static void clearFFAScoreboards(final Player p) {
-		final ScoreboardObjective side = new ScoreboardObjective(scoreboard, "FFA_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a("FlexPvP"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
-		final ScoreboardObjective list = new ScoreboardObjective(scoreboard, "FFA_TAB", IScoreboardCriteria.a, IChatBaseComponent.a("FlexPvP"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
-		final ScoreboardObjective bellowName = new ScoreboardObjective(scoreboard, "FFA_BELLOW_NAME", IScoreboardCriteria.a, IChatBaseComponent.a("FlexPvP"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+		final ScoreboardObjective side = new ScoreboardObjective(scoreboard, "FFA_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+		final ScoreboardObjective list = new ScoreboardObjective(scoreboard, "FFA_TAB", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+		final ScoreboardObjective bellowName = new ScoreboardObjective(scoreboard, "FFA_BELLOW_NAME", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
 
 		sendPacket(p, new PacketPlayOutScoreboardObjective(side, 1));
 		sendPacket(p, new PacketPlayOutScoreboardObjective(list, 1));

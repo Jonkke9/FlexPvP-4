@@ -21,6 +21,7 @@ import fi.flexplex.pvp.loader.ArenaLoader;
 import fi.flexplex.pvp.loader.ConfigLoader;
 import fi.flexplex.pvp.loader.KitLoader;
 import fi.flexplex.pvp.command.LocationToolCmd;
+import fi.flexplex.pvp.misc.world.WorldUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +33,21 @@ public final class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
+
+		try {
+			final File directory = new File("allocations");
+
+			directory.mkdirs();
+
+			for (File file : directory.listFiles()) {
+				if (file.isDirectory()) {
+					WorldUtils.deleteDirectory(file);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		saveDefaultConfig();
 		createCustomConfigFiles();
 		loadLanguages();
@@ -40,7 +56,9 @@ public final class Main extends JavaPlugin {
 		ArenaManager.createAllDuelArenas();
 
 		this.getCommand("location").setExecutor(new LocationToolCmd());
+
 		this.getCommand("cst").setExecutor(new CSTCmd());
+		this.getCommand("cst").setTabCompleter(new CSTCmd());
 
 		this.getCommand("ffa").setExecutor(new FfaCmd());
 		this.getCommand("ffa").setTabCompleter(new FfaCmd());

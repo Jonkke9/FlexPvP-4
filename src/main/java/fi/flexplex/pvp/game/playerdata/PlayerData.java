@@ -3,8 +3,8 @@ package fi.flexplex.pvp.game.playerdata;
 import fi.flexplex.core.api.Leaderboard;
 import fi.flexplex.core.module.leaderboard.LeaderboardModule;
 import fi.flexplex.pvp.game.arena.Arena;
-import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.arena.ArenaManager;
+import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -16,8 +16,6 @@ public final class PlayerData {
 
 	private Arena arena = null;
 	private PlayerDataManager.TimeFrame timeFrame = PlayerDataManager.TimeFrame.MONTHLY;
-
-	private Kit kit = null;
 
 	private int killsAllTime = 0;
 	private int killsThisMonth = 0;
@@ -46,41 +44,40 @@ public final class PlayerData {
 	}
 
 	protected void loadStats() {
-		final UUID uuid = this.player.getUniqueId();
-
+		final UUID uuid = player.getUniqueId();
 
 		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.KILLS)).whenComplete((kills, throwable) -> {
 			if (throwable == null) {
-				this.killsAllTime = kills.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				this.killsThisMonth = kills.getScore(LeaderboardModule.Timeframe.MONTHLY);
+				killsAllTime = kills.getScore(LeaderboardModule.Timeframe.ALL_TIME);
+				killsThisMonth = kills.getScore(LeaderboardModule.Timeframe.MONTHLY);
 			}
 		});
 
 		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.DEATHS)).whenComplete((deaths, throwable) -> {
 			if (throwable == null) {
-				this.deathsAllTime = deaths.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				this.deathsThisMonth = deaths.getScore(LeaderboardModule.Timeframe.MONTHLY);
+				deathsAllTime = deaths.getScore(LeaderboardModule.Timeframe.ALL_TIME);
+				deathsThisMonth = deaths.getScore(LeaderboardModule.Timeframe.MONTHLY);
 			}
 		});
 
 		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.TOP_STREAK)).whenComplete((topStreak, throwable) -> {
 			if (throwable == null) {
-				this.topStreakAllTime = topStreak.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				this.topStreakThisMonth = topStreak.getScore(LeaderboardModule.Timeframe.MONTHLY);
+				topStreakAllTime = topStreak.getScore(LeaderboardModule.Timeframe.ALL_TIME);
+				topStreakThisMonth = topStreak.getScore(LeaderboardModule.Timeframe.MONTHLY);
 			}
 		});
 
 		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.WINS)).whenComplete((wins, throwable) -> {
 			if (throwable == null) {
-				this.winsAllTime = wins.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				this.winsThisMonth = wins.getScore(LeaderboardModule.Timeframe.MONTHLY);
+				winsAllTime = wins.getScore(LeaderboardModule.Timeframe.ALL_TIME);
+				winsThisMonth = wins.getScore(LeaderboardModule.Timeframe.MONTHLY);
 			}
 		});
 
 		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.LOSES)).whenComplete((loses, throwable) -> {
 			if (throwable == null) {
-				this.losesAllTime = loses.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				this.losesThisMonth = loses.getScore(LeaderboardModule.Timeframe.MONTHLY);
+				losesAllTime = loses.getScore(LeaderboardModule.Timeframe.ALL_TIME);
+				losesThisMonth = loses.getScore(LeaderboardModule.Timeframe.MONTHLY);
 			}
 		});
 	}
@@ -121,7 +118,7 @@ public final class PlayerData {
 	}
 
 	private double kd(final int kills, final int deaths) {
-		double kd = 0;
+		double kd = kills;
 		if (kills > 0 && deaths > 0) {
 			kd = (double) kills / deaths;
 		}
@@ -135,14 +132,14 @@ public final class PlayerData {
 		if (newArena == null) {
 			newArena = ArenaManager.getLobby();
 		}
-		this.arena.removePlayer(this.player, causeDeath);
-		newArena.addPlayer(this.player);
-		this.arena = newArena;
+		arena.removePlayer(player, causeDeath);
+		newArena.addPlayer(player);
+		arena = newArena;
 	}
 
 	public Arena getArena() {
-		if (this.arena != null) {
-			return this.arena;
+		if (arena != null) {
+			return arena;
 		}
 		return ArenaManager.getLobby();
 	}
@@ -151,37 +148,37 @@ public final class PlayerData {
 	public int getKills(final PlayerDataManager.TimeFrame timeFrame) {
 		switch (timeFrame) {
 			case MONTHLY -> {
-				return this.killsThisMonth;
+				return killsThisMonth;
 			}
 			case THIS_SESSION -> {
-				return this.killsThisSession;
+				return killsThisSession;
 			}
 		}
-		return this.killsAllTime;
+		return killsAllTime;
 	}
 
 	public int getDeaths(final PlayerDataManager.TimeFrame timeFrame) {
 		switch (timeFrame) {
 			case MONTHLY -> {
-				return this.deathsThisMonth;
+				return deathsThisMonth;
 			}
 			case THIS_SESSION -> {
-				return this.deathsThisSession;
+				return deathsThisSession;
 			}
 		}
-		return this.deathsAllTime;
+		return deathsAllTime;
 	}
 
 	public int getTopStreak(final PlayerDataManager.TimeFrame timeFrame) {
 		switch (timeFrame) {
 			case MONTHLY -> {
-				return this.topStreakThisMonth;
+				return topStreakThisMonth;
 			}
 			case THIS_SESSION -> {
-				return this.topStreakThisSession;
+				return topStreakThisSession;
 			}
 		}
-		return this.topStreakAllTime;
+		return topStreakAllTime;
 	}
 
 	public double getKD(final PlayerDataManager.TimeFrame timeFrame) {
@@ -197,19 +194,19 @@ public final class PlayerData {
 	}
 
 	public int getKills() {
-		return this.getKills(this.timeFrame);
+		return getKills(timeFrame);
 	}
 
 	public int getDeaths() {
-		return this.getDeaths(this.timeFrame);
+		return getDeaths(timeFrame);
 	}
 
 	public int getTopStreak() {
-		return this.getTopStreak(this.timeFrame);
+		return getTopStreak(timeFrame);
 	}
 
 	public double getKD() {
-		return this.getKD(this.timeFrame);
+		return getKD(timeFrame);
 	}
 
 	public int getCurrentStreak() {
@@ -217,26 +214,21 @@ public final class PlayerData {
 	}
 
 	public void resetCurrentStreak() {
-		this.currentStreak = 0;
-	}
-
-	public Kit getKit() {
-		return this.kit;
-	}
-
-	public void setKit(final Kit kit) {
-		this.kit = kit;
+		currentStreak = 0;
 	}
 
 	public PlayerDataManager.TimeFrame timeFrame() {
-		return this.timeFrame;
+		return timeFrame;
 	}
 
-	public void timeFrame(final PlayerDataManager.TimeFrame timeFrame) {
-		this.timeFrame = timeFrame;
+	public void timeFrame(final PlayerDataManager.TimeFrame newTimeFrame) {
+		timeFrame = newTimeFrame;
+		if (arena == ArenaManager.getFfaArena()) {
+			PvpScoreboard.sendFFASidebarScoreboard(player);
+		}
 	}
 
 	public Player player() {
-		return this.player;
+		return player;
 	}
 }

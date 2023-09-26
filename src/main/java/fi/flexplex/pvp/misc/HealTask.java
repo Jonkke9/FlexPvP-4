@@ -1,6 +1,8 @@
 package fi.flexplex.pvp.misc;
 
+import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.arena.PvpArena;
+import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
@@ -14,6 +16,8 @@ public final class HealTask implements Runnable {
 
 	@Override
 	public void run() {
+		final boolean ffaArena = arena == ArenaManager.getFfaArena();
+
 		for (final Player player : arena.getPlayers()) {
 			final double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
@@ -21,6 +25,10 @@ public final class HealTask implements Runnable {
 				player.setHealth(player.getHealth() + 1);
 			} else {
 				player.setHealth(player.getHealth() + (max - player.getHealth()));
+			}
+
+			if(ffaArena) {
+				PvpScoreboard.updateFFABellowNameScoreboard(player, (int) player.getHealth());
 			}
 		}
 	}

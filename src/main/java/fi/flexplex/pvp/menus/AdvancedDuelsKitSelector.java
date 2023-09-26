@@ -12,14 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class AdvancedDuelsKitSelector extends Menu {
 
 	final HashMap<Kit, Boolean> kits = new HashMap<>();
 
 	public AdvancedDuelsKitSelector(final Player player, final Player target) {
 		super(player, 54, "PVP_DUELS_MENU_SELECT_KITS", null);
-
 
 		for (final Kit kit : KitManager.getKits()) {
 			final int slot = kit.getSlot();
@@ -55,7 +53,6 @@ public class AdvancedDuelsKitSelector extends Menu {
 			if (allowedKits.size() == 0) {
 				allowedKits.addAll(KitManager.getFFAKits());
 			}
-
 
 			player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
 			new DuelsArenaSelector(player, target, allowedKits);

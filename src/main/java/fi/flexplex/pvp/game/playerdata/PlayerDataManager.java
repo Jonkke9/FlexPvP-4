@@ -66,11 +66,16 @@ public final class PlayerDataManager {
 	}
 
 	public enum TimeFrame {
-		ALL_TIME,
-		MONTHLY,
-		THIS_SESSION;
+		ALL_TIME ("PVP_TIMEFRAME_ALL_TIME"),
+		MONTHLY ("PVP_TIMEFRAME_MONTHLY"),
+		THIS_SESSION ("PVP_TIMEFRAME_THIS_SESSION"),
+		;
 
 		private static final TimeFrame[] vals = values();
+
+		TimeFrame(final String pvpTimeframe) {
+
+		}
 
 		public TimeFrame next() {
 			return vals[(this.ordinal() + 1) % vals.length];
