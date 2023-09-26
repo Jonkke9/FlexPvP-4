@@ -100,14 +100,14 @@ public class ArenaManager {
 		if (allowed.size() == 0) {
 			return randomDuelArena();
 		}
-
 		final DuelArenaTemplate template = allowed.get(new Random().nextInt(allowed.size()));
 
 		for (final Arena arena : ARENAS.values()) {
 			if (arena instanceof final DuelArena duelArena) {
 				if (duelArena.isFree()) {
-					if (duelArena.getTemplate() == template);
-					return duelArena;
+					if (duelArena.getTemplate() == template) {
+						return duelArena;
+					}
 				}
 			}
 		}

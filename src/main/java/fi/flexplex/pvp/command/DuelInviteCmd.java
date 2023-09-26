@@ -10,9 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,7 +66,16 @@ public final class DuelInviteCmd implements CommandExecutor , TabCompleter {
 	}
 
 	@Override
-	public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-		return null;
+	public List<String> onTabComplete(final CommandSender sender, final Command command, final String s, final String[] args) {
+		final List<String> names = new ArrayList<>();
+
+		if (sender instanceof  Player) {
+			if (args.length == 1) {
+				Util.getOnlinePlayersMinusVanished((Player) sender).forEach((player) ->{
+					names.add(player.getName());
+				});
+			}
+		}
+		return names;
 	}
 }

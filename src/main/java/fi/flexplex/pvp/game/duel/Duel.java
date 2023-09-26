@@ -6,7 +6,6 @@ import fi.flexplex.pvp.Main;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.arena.DuelArena;
 import fi.flexplex.pvp.game.kit.Kit;
-import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.menus.DuelsKitSelector;
 import fi.flexplex.pvp.misc.Util;
@@ -215,6 +214,7 @@ public final class Duel implements Listener {
 		if (fromPlayer.isOnline()) {
 			PlayerDataManager.getPlayerData(fromPlayer).changeArena(ArenaManager.getLobby());
 		}
+		arena.setDuel(null);
 		Duels.deActivateDuel(this);
 		HandlerList.unregisterAll(this);
 	}

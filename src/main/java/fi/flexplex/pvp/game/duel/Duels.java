@@ -6,7 +6,6 @@ import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.Main;
 import fi.flexplex.pvp.game.kit.Kit;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;

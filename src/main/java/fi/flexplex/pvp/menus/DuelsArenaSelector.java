@@ -50,7 +50,7 @@ public class DuelsArenaSelector extends Menu{
 
 			for (final DuelArenaTemplate template : templates.keySet()) {
 				if (templates.get(template)) {
-
+					arenas.add(template);
 				}
 			}
 
