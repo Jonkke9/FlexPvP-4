@@ -1,5 +1,6 @@
 package fi.flexplex.pvp.misc;
 
+import fi.flexplex.core.api.FlexPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -33,11 +34,11 @@ public final class Util {
 		return i;
 	}
 
-	public static Set<Player> getOnlinePlayersMinusVanished(final Player player) {
-		final Set<Player> onlinePlayers = new HashSet<Player>();
+	public static Set<Player> getOnlinePlayersMinusVanished() {
+		final Set<Player> onlinePlayers = new HashSet<>();
 
 		for (final Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-			if (player.canSee(onlinePlayer)) {
+			if (!FlexPlayer.getPlayer(onlinePlayer).isVanished()) {
 				onlinePlayers.add(onlinePlayer);
 			}
 		}

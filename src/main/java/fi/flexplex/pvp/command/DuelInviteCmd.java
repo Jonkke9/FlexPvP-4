@@ -26,7 +26,7 @@ public final class DuelInviteCmd implements CommandExecutor , TabCompleter {
 
 		final Player player = (Player) sender;
 
-		final Collection<Player> online = Util.getOnlinePlayersMinusVanished(player);
+		final Collection<Player> online = Util.getOnlinePlayersMinusVanished();
 
 		if (online.size() <= 1) {
 			Language.sendMessage(sender, "PVP_DUELS_OPPONENT_NOBODY");
@@ -69,12 +69,10 @@ public final class DuelInviteCmd implements CommandExecutor , TabCompleter {
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String s, final String[] args) {
 		final List<String> names = new ArrayList<>();
 
-		if (sender instanceof  Player) {
-			if (args.length == 1) {
-				Util.getOnlinePlayersMinusVanished((Player) sender).forEach((player) ->{
-					names.add(player.getName());
-				});
-			}
+		if (args.length == 1) {
+			Util.getOnlinePlayersMinusVanished().forEach((player) ->{
+				names.add(player.getName());
+			});
 		}
 		return names;
 	}

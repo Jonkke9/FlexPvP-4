@@ -19,13 +19,17 @@ public final class DuelsInviteMenu extends Menu{
 		players.remove(player);
 
 		for (final Player onlinePlayer : players) {
-			this.setItem(skull(onlinePlayer), slot, (type) -> {
-				if (type.isLeftClick()) {
-					Bukkit.dispatchCommand(player, "duelsinvite " + onlinePlayer.getName());
-				} else if (type.isRightClick()) {
-					Bukkit.dispatchCommand(player, "advancedduelsinvite " + onlinePlayer.getName());
-				}
-			});
+			if (slot <= inventory.getSize() - 1) {
+				this.setItem(skull(onlinePlayer), slot, (type) -> {
+					if (type.isLeftClick()) {
+						Bukkit.dispatchCommand(player, "duelsinvite " + onlinePlayer.getName());
+					} else if (type.isRightClick()) {
+						Bukkit.dispatchCommand(player, "advancedduelsinvite " + onlinePlayer.getName());
+					}
+				});
+			} else break;
+			
+			slot++;
 		}
 
 		this.open();
