@@ -1,0 +1,33 @@
+#unique to every arena
+name: "example-ffa"
+type: "ffa"
+
+bounds1: "world 100 100 100"
+bounds2: "world -100 0 -100"
+
+#type specific
+
+#only one ffa arena may be used as primary.
+primary: true
+
+#game settings
+hunger: false
+fall-damage: true
+night-vision: false
+healing-speed: 1
+
+#allowed-kits:
+#  - "hunter"
+#  - "knight"
+#  - "murderer"
+#  - "runner"
+#  - "sniper"
+#  - "tank"
+#  - "viking"
+
+#players spawn location is randomly chosen from these.
+spawn-locations:
+  - "world -174 26.0 83"
+  - "world -160 39.0 51"
+  - "world -177 31.5 112"
+

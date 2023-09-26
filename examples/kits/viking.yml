@@ -1,0 +1,63 @@
+name: 'viking'
+name-key: 'KIT_VIKING'     #add this key to the every locale file
+
+displaymaterial: STONE_AXE
+
+ffa-kit: true
+
+kit-menu-slot: 4
+
+description-lines:
+ - "KIT_VIKING_SPEC1"
+ - "KIT_VIKING_SPEC2"
+
+offhand:
+  ==: org.bukkit.inventory.ItemStack
+  v: 2730
+  type: FISHING_ROD
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    Unbreakable: true  
+hotbar:
+  slot0:
+    ==: org.bukkit.inventory.ItemStack
+    v: 2730
+    type: STONE_AXE
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      Unbreakable: true
+armor:
+  helmet:
+    ==: org.bukkit.inventory.ItemStack
+    v: 2730
+    type: IRON_HELMET
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      Unbreakable: true
+  chestplate:
+    ==: org.bukkit.inventory.ItemStack
+    v: 2730
+    type: LEATHER_CHESTPLATE
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      Unbreakable: true
+  leggings:
+    ==: org.bukkit.inventory.ItemStack
+    v: 2730
+    type: CHAINMAIL_LEGGINGS
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      Unbreakable: true
+  boots:
+    ==: org.bukkit.inventory.ItemStack
+    v: 2730
+    type: CHAINMAIL_BOOTS
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      Unbreakable: true
