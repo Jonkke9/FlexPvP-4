@@ -58,16 +58,7 @@ public class ArenaManager {
 	}
 
 	public static void onDisable() {
-		removeKitSelectors();
 		WorldUtils.deleteWorld(DUEL_WORLD);
-	}
-
-	private static void removeKitSelectors() {
-		for (final Arena arena : ARENAS.values()) {
-			if (arena instanceof Lobby) {
-				((Lobby) arena).removeKitSelectors();
-			}
-		}
 	}
 
 	public static void changeActiveFfaArena(final FfaArena newffaArena) {

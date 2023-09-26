@@ -8,6 +8,7 @@ import fi.flexplex.pvp.misc.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,6 +47,11 @@ public final class Lobby extends Arena implements Listener {
 	}
 
 	private void createArmorStands() {
+		for (Entity entity : bounds1.getWorld().getEntities()) {
+			if (entity.getCustomName() != null && entity.getCustomName().startsWith("KIT_")) {
+				entity.remove();
+			}
+		}
 		for (final String key : this.kitSelectorLocations.keySet()) {
 			final Kit kit = KitManager.getKit(key);
 			if (kit == null) {

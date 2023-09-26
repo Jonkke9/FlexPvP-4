@@ -75,8 +75,7 @@ public final class Kit {
 
 	public ArmorStand spawnArmorStand(final Location loc) {
 		 final ArmorStand armorStand = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
-		 armorStand.customName(Component.text("§6§l" + Language.getStringMessage("FI_FI", displayNameKey)));
-		 armorStand.setCustomNameVisible(true);
+		 armorStand.customName(Component.text("KIT_" + name));
 		 armorStand.setCanMove(false);
 		 armorStand.setGravity(false);
 		 armorStand.setInvulnerable(true);

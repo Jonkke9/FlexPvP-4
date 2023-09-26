@@ -1,5 +1,6 @@
 package fi.flexplex.pvp.menus;
 
+import fi.flexplex.core.api.Language;
 import fi.flexplex.pvp.misc.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,15 +21,14 @@ public final class DuelsInviteMenu extends Menu{
 
 		for (final Player onlinePlayer : players) {
 			if (slot <= inventory.getSize() - 1) {
-				this.setItem(skull(onlinePlayer), slot, (type) -> {
-					if (type.isLeftClick()) {
-						Bukkit.dispatchCommand(player, "duelsinvite " + onlinePlayer.getName());
-					} else if (type.isRightClick()) {
+				this.setItem(skull(onlinePlayer, Language.getStringMessage(player, "PVP_DUELS_MENU_CLICK_ADVANCED")), slot, (type) -> {
+					if (type.isRightClick() || type.isShiftClick()) {
 						Bukkit.dispatchCommand(player, "advancedduelsinvite " + onlinePlayer.getName());
+					} else {
+						Bukkit.dispatchCommand(player, "duelsinvite " + onlinePlayer.getName());
 					}
 				});
 			} else break;
-			
 			slot++;
 		}
 

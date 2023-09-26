@@ -1,6 +1,7 @@
 package fi.flexplex.pvp.misc.scoreboard;
 
 import fi.flexplex.core.api.Language;
+import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
@@ -31,13 +32,35 @@ public final class PvpScoreboard {
 		sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 0));
 		sendPacket(p, new PacketPlayOutScoreboardDisplayObjective(1, obj));
 
-		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", "§8", 5));
+		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", "§8 ", 5));
 		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_KILLS", String.valueOf(data.getKills())), 4));
 		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_DEATHS", String.valueOf(data.getDeaths())), 3));
 		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_KD", new DecimalFormat("#.##").format(data.getKD())), 2));
 		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TOP_STREAK", String.valueOf(data.getTopStreak())), 1));
 		sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", getTimeFrameText(data), 0));
 
+	}
+
+
+	public static void sendDuelsSidebarScoreboard(final Player player, final Player opponent, final int points1, final int points2, final String arenaname) {
+
+		final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "DUELS_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+		obj.a(IChatBaseComponent.a(Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_TITLE")));
+		sendPacket(player, new PacketPlayOutScoreboardObjective(obj, 1));
+		sendPacket(player, new PacketPlayOutScoreboardObjective(obj, 0));
+		sendPacket(player, new PacketPlayOutScoreboardDisplayObjective(1, obj));
+
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8§l  ", 10));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8§l  ", 9));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_ROUND", String.valueOf(points1 + points2 + 1)), 8));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_POINTS", String.valueOf(points1), String.valueOf(points2)), 7));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8§l  ", 6));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Permissions.getLegacyDisplayName(player), 5));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_VERSUS"), 4));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Permissions.getLegacyDisplayName(opponent), 3));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8 ", 2));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_ARENA"), 1));
+		sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§7" + arenaname, 0));
 	}
 
 	public static void sendFFABellowNameScoreboard(final Player p) {
@@ -48,7 +71,7 @@ public final class PvpScoreboard {
 
 		for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
 			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", p.getName(), (int) p.getHealth()));
-			sendPacket(p,new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", player.getName(), (int) player.getHealth()));
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", player.getName(), (int) player.getHealth()));
 		}
 	}
 
@@ -87,6 +110,11 @@ public final class PvpScoreboard {
 		sendPacket(p, new PacketPlayOutScoreboardObjective(bellowName, 1));
 	}
 
+	public static void clearDuelsScoreboards(final Player p) {
+		final ScoreboardObjective side = new ScoreboardObjective(scoreboard, "DUELS_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+		sendPacket(p, new PacketPlayOutScoreboardObjective(side, 1));
+	}
+
 	private static String getTimeFrameText(final PlayerData playerData) {
 		String string = " ";
 		switch (playerData.timeFrame()) {
@@ -100,7 +128,7 @@ public final class PvpScoreboard {
 				string = Language.getStringMessage(playerData.player(), "TOPLIST_ALL_TIME");
 			}
 		}
-		return "§8(" + string  + ")";
+		return "§8(" + string + ")";
 	}
 
 	private static void sendPacket(final Player player, final Packet<?> packet) {

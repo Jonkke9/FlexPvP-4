@@ -9,6 +9,7 @@ import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.menus.DuelsKitSelector;
 import fi.flexplex.pvp.misc.Util;
+import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -74,6 +75,22 @@ public final class Duel implements Listener {
 		arena.onJoin(fromPlayer);
 		arena.onJoin(toPlayer);
 
+		PvpScoreboard.sendDuelsSidebarScoreboard(
+				fromPlayer,
+				toPlayer,
+				toPlayerScore,
+				fromPlayerScore,
+				Language.getStringMessage(fromPlayer, arena.getTemplate().getDisplayNameKey())
+		);
+
+		PvpScoreboard.sendDuelsSidebarScoreboard(
+				toPlayer,
+				fromPlayer,
+				fromPlayerScore,
+				toPlayerScore,
+				Language.getStringMessage(toPlayer, arena.getTemplate().getDisplayNameKey())
+		);
+
 		if (kits.size() == 1) {
 			kits.get(0).deploy(fromPlayer);
 			kits.get(0).deploy(toPlayer);
@@ -132,8 +149,7 @@ public final class Duel implements Listener {
 					}
 				}
 			}
-		}, 100);
-
+		}, 140);
 	}
 
 	public void onDeath(final Player player, final boolean resume) {
@@ -151,6 +167,9 @@ public final class Duel implements Listener {
 		}
 
 		onWin(killer, player);
+
+		Language.sendMessage(killer, "PVP_DUELS_VICTORY", Permissions.getLegacyDisplayName(player));
+		Language.sendMessage(player, "PVP_DUELS_DEFEAT", Permissions.getLegacyDisplayName(killer));
 
 		killer.playSound(Sound.sound(org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, Sound.Source.AMBIENT, 1.0f, 1.0f));
 		player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_BLAZE_DEATH, Sound.Source.AMBIENT, 1.0f, 1.0f));
@@ -172,11 +191,9 @@ public final class Duel implements Listener {
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 
-
 		if (!resume) {
 			return;
 		}
-
 
 		onRoundEnd();
 		Util.resetPlayer(toPlayer);
@@ -208,10 +225,12 @@ public final class Duel implements Listener {
 		}
 		arena.deActivate();
 		if (toPlayer.isOnline()) {
+			PvpScoreboard.clearDuelsScoreboards(toPlayer);
 			PlayerDataManager.getPlayerData(toPlayer).changeArena(ArenaManager.getLobby());
 		}
 
 		if (fromPlayer.isOnline()) {
+			PvpScoreboard.clearDuelsScoreboards(fromPlayer);
 			PlayerDataManager.getPlayerData(fromPlayer).changeArena(ArenaManager.getLobby());
 		}
 		arena.setDuel(null);
@@ -230,6 +249,11 @@ public final class Duel implements Listener {
 
 	public void onLeave(final Player player) {
 		if (state != DuelState.STOPPING) {
+			final Player opponent = player == fromPlayer ? toPlayer : fromPlayer;
+
+			Language.sendMessage(player, "PVP_DUELS_CANCEL_YOU");
+			Language.sendMessage(opponent, "PVP_DUELS_CANCEL_OTHER");
+
 			if (state == DuelState.ACTIVE) {
 				onDeath(player, false);
 			}
