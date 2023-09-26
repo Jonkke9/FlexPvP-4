@@ -25,7 +25,7 @@ public abstract class Arena {
 	protected final Set<Player> players;
 	protected final Location bounds1;
 	protected final Location bounds2;
-	protected final GameMode gameMode = GameMode.ADVENTURE;
+	protected GameMode gameMode = GameMode.ADVENTURE;
 
 	public Arena(final String name, final Location bounds1, final Location bounds2) {
 		this.name = name;

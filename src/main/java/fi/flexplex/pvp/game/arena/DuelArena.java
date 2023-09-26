@@ -35,7 +35,9 @@ public final class DuelArena extends PvpArena{
 			player.teleport(locations[0]);
 		}else if (player == activeDuel.toPlayer()) {
 			player.teleport(locations[1]);
-		}
+		} else return;
+
+		player.setGameMode(activeDuel.getSettings().gameMode());
 	}
 
 	@Override

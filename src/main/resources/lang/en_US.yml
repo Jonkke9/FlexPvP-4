@@ -87,7 +87,7 @@ TOPLIST_SESSION:                        "This Time"
 
 KIT_KNIGHT:                             "Knight"
 KIT_KNIGHT_SPEC1:                       "- Iron sword"
-KIT_KNIGHT_SPEC2:                       "- Iron & leather armor"
+KIT_KNIGHT_SPEC2:                       "- leather armor"
 KIT_MURDERER:                           "Murderer"
 KIT_MURDERER_SPEC1:                     "- Diamond sword"
 KIT_MURDERER_SPEC2:                     "- Golden armor"

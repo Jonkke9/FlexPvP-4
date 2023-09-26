@@ -2,6 +2,7 @@ package fi.flexplex.pvp.listener;
 
 import fi.flexplex.core.util.PermissionNodes;
 import org.bukkit.GameMode;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,8 +39,15 @@ public class WorldProtectListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if ((event.getAction() == Action.RIGHT_CLICK_BLOCK  && !event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT))  || event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-			event.setCancelled(true);
+		if (!Tag.BUTTONS.getValues().contains(event.getClickedBlock().getType())) {
+			if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().isInteractable() &&
+					event.getPlayer().getGameMode() != GameMode.CREATIVE) &&
+					!event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT)) {
+				if (Tag.BUTTONS.getValues().contains(event.getClickedBlock().getType())) {
+
+				}
+				event.setCancelled(true);
+			}
 		}
 	}
 

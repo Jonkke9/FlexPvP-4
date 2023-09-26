@@ -1,5 +1,6 @@
 package fi.flexplex.pvp.game.kit;
 
+import fi.flexplex.core.api.Hologram;
 import fi.flexplex.core.api.Language;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -79,8 +80,9 @@ public final class Kit {
 		 armorStand.setCanMove(false);
 		 armorStand.setGravity(false);
 		 armorStand.setInvulnerable(true);
-		 armorStand.setPersistent(true);
+		 armorStand.setPersistent(false);
 		 armorStand.setArms(true);
+		 armorStand.setAI(false);
 
 		 armorStand.setItem(EquipmentSlot.OFF_HAND, contents[40]);
 		 armorStand.setItem(EquipmentSlot.HEAD, contents[39]);
@@ -88,6 +90,21 @@ public final class Kit {
 		 armorStand.setItem(EquipmentSlot.LEGS, contents[37]);
 		 armorStand.setItem(EquipmentSlot.FEET, contents[36]);
 		 armorStand.setItem(EquipmentSlot.HAND, contents[0]);
+
+		 loc.add(0, 1.5, 0);
+
+		 final String[][] lines = new String[descriptionLineKeys.size() + 1][1];
+
+		 lines[0][0] = "t:" + displayNameKey;
+
+		 int i = 1;
+		 for (final String key : descriptionLineKeys) {
+			 lines[i][0] = "t:" + key;
+			 i++;
+		 }
+
+		 Hologram.createHologram(loc, lines);
+
 		 return armorStand;
 	}
 

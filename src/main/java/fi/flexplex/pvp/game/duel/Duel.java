@@ -206,7 +206,6 @@ public final class Duel implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
 		PlayerDataManager.getPlayerData(fromPlayer).changeArena(arena, true);
 		PlayerDataManager.getPlayerData(toPlayer).changeArena(arena, true);
-
 		onRoundStart();
 	}
 

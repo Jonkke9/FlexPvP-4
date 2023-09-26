@@ -75,19 +75,6 @@ public final class PvPListener implements Listener {
 	}
 
 	@EventHandler (ignoreCancelled = true)
-	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK
-				&& event.getClickedBlock().getType().isInteractable()
-				&& event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-
-			// We have to make sure that the block clicked is interactable, because otherwise we can
-			// get unwanted effects with bows and other tools that are used with right click.
-
-			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler (ignoreCancelled = true)
 	public void onPlayer(final PlayerArmorStandManipulateEvent event) {
 		event.setCancelled(true);
 	}
