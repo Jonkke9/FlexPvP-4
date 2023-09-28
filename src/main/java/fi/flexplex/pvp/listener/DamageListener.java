@@ -22,8 +22,15 @@ public final class DamageListener implements Listener {
 		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
+
 		final Player player = ((Player) event.getEntity()).getPlayer();
 		final PlayerData data = PlayerDataManager.getPlayerData(player);
+
+		if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+			event.setCancelled(true);
+			data.changeArena(ArenaManager.getLobby(),true);
+			return;
+		}
 
 		if (!(data.getArena() instanceof PvpArena)) {
 			event.setCancelled(true);
@@ -38,11 +45,8 @@ public final class DamageListener implements Listener {
 
 		if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
 			event.setDamage(Integer.MAX_VALUE);
-		}else if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-			event.setCancelled(true);
-			data.changeArena(ArenaManager.getLobby(),true);
-			return;
 		}
+
 		if (data.getArena() == ArenaManager.getFfaArena()) {
 			PvpScoreboard.updateFFABellowNameScoreboard(player, (int) (player.getHealth() - event.getFinalDamage()));
 		}

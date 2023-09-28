@@ -141,7 +141,7 @@ public final class DuelArenaTemplate {
 		final ItemStack icon = new ItemStack(displayMaterial);
 		final ItemMeta meta = icon.getItemMeta();
 
-		meta.displayName(Language.getMessage(sender, displayNameKey));
+		meta.displayName(Component.text("§7" + Language.getStringMessage(sender, displayNameKey)));
 
 		if (builderNames.size() != 0) {
 			final List<Component> lore = new ArrayList<>();
@@ -150,8 +150,8 @@ public final class DuelArenaTemplate {
 			for (final String name : builderNames) {
 				lore.add(Language.getMessage(sender, "PVP_ARENA_BUILDER", name));
 			}
+			meta.lore(lore);
 		}
-
 		icon.setItemMeta(meta);
 		return icon;
 	}

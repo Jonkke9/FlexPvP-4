@@ -241,7 +241,14 @@ public final class Duel implements Listener {
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		if (state == DuelState.COUNTDOWN) {
 			if (arena.getPlayers().contains(event.getPlayer())) {
-				event.setCancelled(true);
+				event.setTo(new Location(
+						event.getFrom().getWorld(),
+						event.getFrom().getX(),
+						event.getFrom().getY(),
+						event.getFrom().getZ(),
+						event.getTo().getYaw(),
+						event.getTo().getPitch()
+				));
 			}
 		}
 	}

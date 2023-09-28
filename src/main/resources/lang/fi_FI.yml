@@ -56,6 +56,8 @@ PVP_DUELS_INVITE_ARENA:                 "§eAreena §7%arg0%"
 PVP_DUELS_INVITE_KITS:                  "§e Sallitut kitit:"
 PVP_DUELS_INVITE_KIT:                   "§7 - %arg0%"
 PVP_DUELS_INVITE_CLICK:                 "§6§lPaina hyväksyäksesi"
+PVP_DUELS_OPPONENT_SELECT:              "§aValitse"
+
 
 PVP_ARENA_BUILDERS:                     "§6Rakentajat"
 PVP_ARENA_BUILDER:                      "§7- %arg0%"
@@ -63,7 +65,7 @@ PVP_ARENA_BUILDER:                      "§7- %arg0%"
 PVP_DUELS_MENU_NEXT:                    "§6Seuraava"
 PVP_DUELS_MENU_ARENA:                   "§6Valitse areena"
 PVP_DUELS_MENU_SELECT_KITS:             "§6Valitse sallitut areenat"
-PVP_DUELS_MENU_CLICK_ADVANCED:          "§7Avaa lisäasetukset (shift + click)"
+PVP_DUELS_MENU_CLICK_ADVANCED:          "§7(Avaa lisäasetukset: shift + click)"
 
 PVP_DUELS_END:                           "        §c§lLopeta"
 PVP_DUELS_REMATCH:                       "       §a§lUusintaottelu"

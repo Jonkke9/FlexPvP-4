@@ -20,7 +20,7 @@ public final class DuelsInviteKitSelector extends Menu{
 	final Player target;
 
 	public DuelsInviteKitSelector(final Player player, final Player target) {
-		super(player, 18, "PVP_MENU_KIT_SELECTOR", null);
+		super(player, 9, "PVP_MENU_KIT_SELECTOR", null);
 
 		this.target = target;
 
@@ -44,22 +44,5 @@ public final class DuelsInviteKitSelector extends Menu{
 		});
 
 		this.open();
-	}
-}
-
-final class ExtendedDuelKitSelector extends Menu {
-
-	final Player target;
-
-	public ExtendedDuelKitSelector(final Player player, final Player target) {
-		super(player, 54, "PVP_MENU_KIT_SELECTOR", null);
-
-		this.target = target;
-
-		for (final Kit kit : KitManager.getKits()) {
-			this.setItem(kit.getIcon(player), kit.getSlot(), (type) -> {
-
-			});
-		}
 	}
 }
