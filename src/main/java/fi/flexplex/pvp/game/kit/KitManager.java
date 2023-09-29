@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class KitManager {
 
-	private static HashMap<String, Kit> KITS = new HashMap<>();
+	private static Map<String, Kit> KITS = new HashMap<>();
 
 	public static Kit getKit(final String name) {
 		if (KITS.containsKey(name)) {

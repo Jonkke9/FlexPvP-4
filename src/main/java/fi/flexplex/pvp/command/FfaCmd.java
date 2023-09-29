@@ -27,11 +27,7 @@ public final class FfaCmd implements CommandExecutor, TabCompleter {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
-		//TODO: permission check
-		/*if (!sender.hasPermission("pvp.ffa.join")) {
-			Language.sendMessage(sender, "NO_PERMISSIONS_TO_COMMAND");
-			return false;
-		}*/
+
 		final Player player = (Player) sender;
 		final PlayerData data = PlayerDataManager.getPlayerData(player);
 

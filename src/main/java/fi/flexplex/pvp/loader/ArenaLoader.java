@@ -17,16 +17,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public final class ArenaLoader {
-	//TODO: clean
 	public static void loadAllArenas() {
 		final List<YamlConfiguration> configs = ConfigLoader.loadConfigFilesInDirectory(new File(Main.getInstance().getDataFolder(), "arenas"));
 		for (final YamlConfiguration config : configs) {
@@ -56,7 +52,6 @@ public final class ArenaLoader {
 				Main.getInstance().getLogger().severe("could not load arena " + name + ": invalid bounds");
 				continue;
 			}
-			Arena arena = null;
 
 			switch (type) {
 				case "ffa":
@@ -71,8 +66,8 @@ public final class ArenaLoader {
 				default:
 					Main.getInstance().getLogger().severe("could not load arena " + name + ": invalid type");
 			}
-
 		}
+
 		if (ArenaManager.getLobby() == null) {
 			Main.getInstance().getLogger().severe("No lobby arena loaded: this will cause plugin to not work");
 		}
@@ -114,7 +109,7 @@ public final class ArenaLoader {
 		if (allowedKits.isEmpty()) {
 			allowedKits.addAll(KitManager.getKits());
 		}
-		final List<Location> spawnLocations = new ArrayList<Location>();
+		final List<Location> spawnLocations = new ArrayList<>();
 
 		for (final String locRaw : config.getStringList("spawn-locations")) {
 			final Location loc = parseLocation(locRaw);
@@ -183,7 +178,10 @@ public final class ArenaLoader {
 
 		config.addDefault("name-key", "PVP_ARENA_DUELS_GENERIC");
 		final String nameKey = config.getString("name-key");
-		final DuelArenaTemplate template = new DuelArenaTemplate(name, bounds1, bounds2, builders, locations.toArray(new Location[locations.size()]), nameKey, displayMaterial);
+
+		config.addDefault("amount", 1);
+		final int amount = config.getInt("amount");
+		final DuelArenaTemplate template = new DuelArenaTemplate(amount,name, bounds1, bounds2, builders, locations.toArray(new Location[locations.size()]), nameKey, displayMaterial);
 		ArenaManager.addDuelArenaTemplate(template);
 	}
 

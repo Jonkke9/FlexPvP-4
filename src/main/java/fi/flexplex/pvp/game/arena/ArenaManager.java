@@ -135,8 +135,10 @@ public class ArenaManager {
 
 	public static void createAllDuelArenas() {
 		for (final DuelArenaTemplate template : TEMPLATES.values()) {
-			final DuelArena arena = buildArena(template);
-			ARENAS.putIfAbsent(arena.getName(), arena);
+			for (int i = 0; i < template.getAmount(); i++) {
+				final DuelArena arena = buildArena(template);
+				ARENAS.putIfAbsent(arena.getName(), arena);
+			}
 		}
 	}
 

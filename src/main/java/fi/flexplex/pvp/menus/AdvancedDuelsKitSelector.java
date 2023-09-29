@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,10 @@ public class AdvancedDuelsKitSelector extends Menu {
 		}
 
 		final ItemStack arrow = new ItemStack(Material.ARROW);
-		arrow.getItemMeta().displayName(Language.getMessage(player, "PVP_DUELS_MENU_NEXT"));
+		final ItemMeta arrowMeta = arrow.getItemMeta();
+		arrowMeta.displayName(Language.getMessage(player, "PVP_DUELS_MENU_NEXT"));
+		arrow.setItemMeta(arrowMeta);
+
 		setItem(arrow, 53, (type) -> {
 			final List<Kit> allowedKits = new ArrayList<>();
 

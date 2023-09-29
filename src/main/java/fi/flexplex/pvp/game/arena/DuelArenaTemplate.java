@@ -22,6 +22,7 @@ import java.util.UUID;
 public final class DuelArenaTemplate {
 
 	private int id = 0;
+	private final int amount;
 	private final int slices;
 	private final String name;
 	final int sizeX, sizeY, sizeZ;
@@ -31,7 +32,8 @@ public final class DuelArenaTemplate {
 	private final Set<BlockDataLocation> blocks;
 	private final Location[] normalizedLocations;
 
-	public DuelArenaTemplate(final String name,
+	public DuelArenaTemplate(final int amount,
+							 final String name,
 							 final Location loc1,
 							 final Location loc2,
 							 final List<UUID> builders,
@@ -80,6 +82,7 @@ public final class DuelArenaTemplate {
 		this.displayNameKey = displayNameKey;
 		this.builderNames = new ArrayList<>();
 		this.blocks = blocks1;
+		this.amount = amount;
 		this.name = name;
 
 		for (final UUID uuid : builders) {
@@ -135,6 +138,10 @@ public final class DuelArenaTemplate {
 
 	public String getDisplayNameKey() {
 		return displayNameKey;
+	}
+
+	public int getAmount() {
+		return amount;
 	}
 
 	public ItemStack getIcon(final CommandSender sender) {

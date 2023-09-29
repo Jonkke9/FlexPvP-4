@@ -21,7 +21,7 @@ public abstract class PvpArena extends Arena {
 
 	public abstract void send(Player player, Kit kit);
 
-	public boolean allowDamage(EntityDamageEvent.DamageCause cause) {
+	public boolean allowDamage(final EntityDamageEvent.DamageCause cause) {
 		return false;
 	}
 

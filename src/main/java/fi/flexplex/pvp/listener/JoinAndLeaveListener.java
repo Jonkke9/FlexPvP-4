@@ -1,7 +1,6 @@
 package fi.flexplex.pvp.listener;
 
 import fi.flexplex.pvp.game.arena.ArenaManager;
-import fi.flexplex.pvp.game.duel.Duel;
 import fi.flexplex.pvp.game.duel.Duels;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;

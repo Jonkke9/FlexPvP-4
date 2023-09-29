@@ -2,7 +2,6 @@ package fi.flexplex.pvp.listener;
 
 import fi.flexplex.core.util.event.DeathMessageSendEvent;
 import fi.flexplex.pvp.game.arena.ArenaManager;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

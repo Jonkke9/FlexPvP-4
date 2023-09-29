@@ -31,6 +31,9 @@ public final class Util {
 			i += 9;
 		}
 		if (i == 0) i = 9;
+
+		if (i >= 54) i = 54;
+
 		return i;
 	}
 
