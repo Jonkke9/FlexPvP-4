@@ -20,6 +20,7 @@ public final class DamageListener implements Listener {
 	@EventHandler
 	public void onDamage(final EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player)) {
+			event.setCancelled(true);
 			return;
 		}
 

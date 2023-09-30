@@ -47,9 +47,7 @@ public final class Duels {
 
 		INVITES.add(invite);
 
-		Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
-			INVITES.remove(invite);
-		}, 6000);
+		Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> INVITES.remove(invite), 3000);
 
 		sendInviteMessage(invite);
 		Language.sendMessage(from, "PVP_DUELS_INVITE_SENT", Permissions.getLegacyDisplayName(to));

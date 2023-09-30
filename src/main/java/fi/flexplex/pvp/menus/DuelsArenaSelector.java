@@ -3,9 +3,6 @@ package fi.flexplex.pvp.menus;
 import fi.flexplex.core.api.Language;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.arena.DuelArenaTemplate;
-import fi.flexplex.pvp.game.duel.DuelInvite;
-import fi.flexplex.pvp.game.duel.DuelSettings;
-import fi.flexplex.pvp.game.duel.Duels;
 import fi.flexplex.pvp.game.kit.Kit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,11 +23,8 @@ public class DuelsArenaSelector extends Menu{
 		for (final DuelArenaTemplate template : ArenaManager.getAllDuelArenaTemplates()) {
 			final int slot1 = slot;
 			if (slot <= 17) {
-				templates.put(template, false);
-				final ItemStack icon = template.getIcon(player);
-				icon.setType(Material.BARRIER);
-
-				setItem(icon, slot, (type) -> {
+				templates.put(template, true);
+				setItem(template.getIcon(player), slot, (type) -> {
 					final boolean active = templates.get(template);
 					templates.put(template, !active);
 
@@ -58,7 +52,7 @@ public class DuelsArenaSelector extends Menu{
 			}
 
 			player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
-			Duels.sendInvite(new DuelInvite(player, target, kits, DuelSettings.defaultSettings() ,ArenaManager.randomDuelArena(arenas)));
+			new DuelSettingMenu(player, target, kits, ArenaManager.randomDuelArena(arenas));
 
 		});
 		open();

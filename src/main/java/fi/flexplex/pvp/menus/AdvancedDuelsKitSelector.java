@@ -23,11 +23,8 @@ public class AdvancedDuelsKitSelector extends Menu {
 		for (final Kit kit : KitManager.getKits()) {
 			final int slot = kit.getSlot();
 			if (slot <= 44) {
-				kits.put(kit, false);
-				final ItemStack icon = kit.getIcon(player);
-				icon.setType(Material.BARRIER);
-
-				setItem(icon, slot, (type) -> {
+				kits.put(kit, true);
+				setItem(kit.getIcon(player), slot, (type) -> {
 					final boolean active = kits.get(kit);
 					kits.put(kit, !active);
 
@@ -54,7 +51,7 @@ public class AdvancedDuelsKitSelector extends Menu {
 				}
 			}
 
-			if (allowedKits.size() == 0) {
+			if (allowedKits.isEmpty()) {
 				allowedKits.addAll(KitManager.getFFAKits());
 			}
 

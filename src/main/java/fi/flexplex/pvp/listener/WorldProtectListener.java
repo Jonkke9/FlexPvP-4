@@ -2,6 +2,7 @@ package fi.flexplex.pvp.listener;
 
 import fi.flexplex.core.util.PermissionNodes;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -40,12 +40,12 @@ public class WorldProtectListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if (!Tag.BUTTONS.getValues().contains(event.getClickedBlock().getType())) {
-			if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().isInteractable() &&
-					event.getPlayer().getGameMode() != GameMode.CREATIVE) &&
-					!event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT)) {
-				if (Tag.BUTTONS.getValues().contains(event.getClickedBlock().getType())) {
+		final Material type = event.getClickedBlock().getType();
 
+		if (!Tag.BUTTONS.getValues().contains(type) && !Tag.DOORS.getValues().contains(type)) {
+			if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && type.isInteractable())) {
+				if (event.getPlayer().getGameMode() == GameMode.CREATIVE && event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT)) {
+					return;
 				}
 				event.setCancelled(true);
 			}

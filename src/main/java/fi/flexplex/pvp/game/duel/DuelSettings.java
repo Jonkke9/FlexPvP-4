@@ -8,7 +8,7 @@ public final class DuelSettings {
 	private final int regenSpeed;
 	private final GameMode gameMode;
 
-	private DuelSettings(final boolean hunger, final int regenSpeed, final GameMode gameMode) {
+	public DuelSettings(final boolean hunger, final int regenSpeed, final GameMode gameMode) {
 		this.hunger = hunger;
 		this.regenSpeed = regenSpeed;
 		this.gameMode = gameMode;

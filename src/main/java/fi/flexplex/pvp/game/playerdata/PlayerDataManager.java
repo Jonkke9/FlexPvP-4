@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public final class PlayerDataManager {
-	private static final HashMap<UUID, PlayerData> cache = new HashMap<UUID, PlayerData>();
+	private static final HashMap<UUID, PlayerData> cache = new HashMap<>();
 
 
 	public static void onJoin(final Player player) {
@@ -61,14 +61,11 @@ public final class PlayerDataManager {
 		return cache.containsKey(player.getUniqueId());
 	}
 
-	public static void deletePlayerData(final Player player) {
-		cache.remove(player.getUniqueId());
-	}
 
 	public enum TimeFrame {
-		ALL_TIME ("PVP_TIMEFRAME_ALL_TIME"),
-		MONTHLY ("PVP_TIMEFRAME_MONTHLY"),
-		THIS_SESSION ("PVP_TIMEFRAME_THIS_SESSION"),
+		ALL_TIME ("PVP_STATS_TIMEFRAME_ALL_TIME"),
+		MONTHLY ("PVP_STAT_TIMEFRAME_MONTHLY"),
+		THIS_SESSION ("PVP_STAT_TIMEFRAME_THIS_SESSION"),
 		;
 
 		private static final TimeFrame[] vals = values();

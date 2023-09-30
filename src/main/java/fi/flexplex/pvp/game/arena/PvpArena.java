@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public abstract class PvpArena extends Arena {
 
-	BukkitTask healTask;
+	BukkitTask healTask = null;
 
 	public PvpArena(final String name, final Location bounds1, final Location bounds2) {
 		super(name, bounds1, bounds2);
@@ -26,11 +26,15 @@ public abstract class PvpArena extends Arena {
 	}
 
 	public void activate(final int healDelay) {
-		this.healTask = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new HealTask(this), healDelay, healDelay);
+		if (healDelay > 0) {
+			this.healTask = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new HealTask(this), healDelay, healDelay);
+		}
 	}
 
 	public void deActivate() {
-		healTask.cancel();
+		if (healTask != null) {
+			healTask.cancel();
+		}
 	}
 
 }

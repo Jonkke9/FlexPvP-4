@@ -55,7 +55,7 @@ public final class DuelArena extends PvpArena{
 	}
 
 	@Override
-	public void send(Player player, Kit kit) {
+	public void send(final Player player, final Kit kit) {
 
 	}
 
@@ -83,14 +83,6 @@ public final class DuelArena extends PvpArena{
 		this.ready = ready;
 	}
 
-	public void setLocation(final Location loc, final int index) {
-		locations[index] = loc;
-	}
-
-	public Location getLocation(final int index) {
-		return  locations[index].clone();
-	}
-
 	@Override
 	public boolean allowHunger() {
 		if (activeDuel == null) {
@@ -103,5 +95,7 @@ public final class DuelArena extends PvpArena{
 	public DuelArenaTemplate getTemplate() {
 		return template;
 	}
+
+
 
 }
