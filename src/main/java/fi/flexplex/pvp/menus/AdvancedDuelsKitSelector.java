@@ -18,11 +18,11 @@ public class AdvancedDuelsKitSelector extends Menu {
 	final HashMap<Kit, Boolean> kits = new HashMap<>();
 
 	public AdvancedDuelsKitSelector(final Player player, final Player target) {
-		super(player, 54, "PVP_DUELS_MENU_SELECT_KITS", null);
+		super(player, 27, "PVP_DUELS_MENU_SELECT_KITS", null);
 
 		for (final Kit kit : KitManager.getKits()) {
 			final int slot = kit.getSlot();
-			if (slot <= 44) {
+			if (slot <= 25) {
 				kits.put(kit, true);
 				setItem(kit.getIcon(player), slot, (type) -> {
 					final boolean active = kits.get(kit);
@@ -42,7 +42,7 @@ public class AdvancedDuelsKitSelector extends Menu {
 		arrowMeta.displayName(Language.getMessage(player, "PVP_DUELS_MENU_NEXT"));
 		arrow.setItemMeta(arrowMeta);
 
-		setItem(arrow, 53, (type) -> {
+		setItem(arrow, 26, (type) -> {
 			final List<Kit> allowedKits = new ArrayList<>();
 
 			for (final Kit kit : kits.keySet()) {

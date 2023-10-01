@@ -47,7 +47,7 @@ public class DuelSettingMenu extends Menu {
 		});
 
 		final ItemStack regenDefault = setDisplayName(new ItemStack(Material.GOLD_INGOT), Language.getMessage(player, "PVP_DUELS_SETTINGS_HEALING_DEFAULT"));
-		this.setItem(regenDefault, 1, (type) -> {
+		this.setItem(regenDefault, 0, (type) -> {
 			regenSpeed = 40;
 			updateHealingSpeedDisplay();
 		});
