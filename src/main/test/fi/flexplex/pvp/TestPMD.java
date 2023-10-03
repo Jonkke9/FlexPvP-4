@@ -1,18 +1,17 @@
 package fi.flexplex.pvp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PMD.StatusCode;
+import net.sourceforge.pmd.PMDConfiguration;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import net.sourceforge.pmd.PMD;
-import net.sourceforge.pmd.PMDConfiguration;
-import net.sourceforge.pmd.PMD.StatusCode;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 final class TestPMD {
 

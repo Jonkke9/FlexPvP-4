@@ -109,7 +109,7 @@ public class ArenaManager {
 		final Location loc = SPIRAL.next();
 		final DuelArena arena = template.buildArena(loc);
 		final DuelArenaBuildTask task = new DuelArenaBuildTask(template, loc, arena);
-		task.runTaskTimer(Main.getInstance(), getBuildTaskDelay(), 0l);
+		task.runTaskTimer(Main.getInstance(), getBuildTaskDelay(), 0L);
 		BUILD_TASKS.add(task);
 		ARENAS.putIfAbsent(arena.getName(), arena);
 		return arena;

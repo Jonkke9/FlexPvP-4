@@ -96,8 +96,6 @@ TOPLIST_MONTH_9:                        "September"
 TOPLIST_MONTH_10:                       "October"
 TOPLIST_MONTH_11:                       "November"
 TOPLIST_MONTH_12:                       "December"
-TOPLIST_ALL_TIME:                       "All Time"
-TOPLIST_SESSION:                        "This Time"
 
 KIT_KNIGHT:                             "§6Knight"
 KIT_KNIGHT_SPEC1:                       "§7- Iron sword"

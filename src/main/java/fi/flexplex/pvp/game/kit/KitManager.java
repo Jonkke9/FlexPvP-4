@@ -9,7 +9,7 @@ import java.util.Map;
 
 public final class KitManager {
 
-	private static Map<String, Kit> KITS = new HashMap<>();
+	private static final Map<String, Kit> KITS = new HashMap<>();
 
 	public static Kit getKit(final String name) {
 		if (KITS.containsKey(name)) {

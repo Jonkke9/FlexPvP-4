@@ -9,18 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpawnCmd implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
-		final Player player = (Player) sender;
 		PlayerDataManager.getPlayerData(player).changeArena(ArenaManager.getLobby(), true);
 		return false;
 	}

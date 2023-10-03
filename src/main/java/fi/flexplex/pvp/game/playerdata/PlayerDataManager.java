@@ -13,7 +13,6 @@ public final class PlayerDataManager {
 
 	public static void onJoin(final Player player) {
 		cache.put(player.getUniqueId(), new PlayerData(player, ArenaManager.getLobby()));
-		getPlayerData(player).loadStats();
 	}
 
 	public static void onLeave(final Player player) {

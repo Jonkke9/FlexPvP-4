@@ -33,11 +33,10 @@ public final class DamageListener implements Listener {
 			return;
 		}
 
-		if (!(data.getArena() instanceof PvpArena)) {
+		if (!(data.getArena() instanceof PvpArena pvpArena)) {
 			event.setCancelled(true);
 			return;
 		}
-		final PvpArena pvpArena = (PvpArena) data.getArena();
 
 		if (!pvpArena.allowDamage(event.getCause())) {
 			event.setCancelled(true);
@@ -76,16 +75,14 @@ public final class DamageListener implements Listener {
 		while (true) {
 			if (damager instanceof Player) {
 				return (Player) damager;
-			} else if (damager instanceof Projectile) {
-				final Projectile projectile = (Projectile) damager;
+			} else if (damager instanceof Projectile projectile) {
 
 				if (projectile.getShooter() instanceof Entity) {
 					damager = (Entity) projectile.getShooter();
 				} else {
 					return null;
 				}
-			} else if (damager instanceof Tameable) {
-				final Tameable tameable = (Tameable) damager;
+			} else if (damager instanceof Tameable tameable) {
 
 				if (tameable.getOwner() instanceof Entity) {
 					damager = (Entity) tameable.getOwner();

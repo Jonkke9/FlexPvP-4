@@ -96,8 +96,6 @@ TOPLIST_MONTH_9:                        "Syyskuu"
 TOPLIST_MONTH_10:                       "Lokakuu"
 TOPLIST_MONTH_11:                       "Marraskuu"
 TOPLIST_MONTH_12:                       "Joulukuu"
-TOPLIST_ALL_TIME:                       "Ikuinen"
-TOPLIST_SESSION:                        "Tämä Kerta"
 
 KIT_KNIGHT:                             "§6Soturi"
 KIT_KNIGHT_SPEC1:                       "§7- Rautamiekka"

@@ -2,8 +2,8 @@ package fi.flexplex.pvp.command;
 
 import fi.flexplex.core.api.Language;
 import fi.flexplex.pvp.menus.AdvancedDuelsKitSelector;
-import fi.flexplex.pvp.menus.DuelsInviteMenu;
 import fi.flexplex.pvp.menus.DuelsInviteKitSelector;
+import fi.flexplex.pvp.menus.DuelsInviteMenu;
 import fi.flexplex.pvp.misc.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,12 +19,10 @@ public final class DuelInviteCmd implements CommandExecutor , TabCompleter {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String s, final String[] args) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
-
-		final Player player = (Player) sender;
 
 		final Collection<Player> online = Util.getOnlinePlayersMinusVanished();
 

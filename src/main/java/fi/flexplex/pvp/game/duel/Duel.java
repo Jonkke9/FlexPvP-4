@@ -117,7 +117,7 @@ public final class Duel implements Listener {
 					toPlayer.playSound(Sound.sound(org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, Sound.Source.AMBIENT, 1.0f, 1.0f));
 					counter--;
 				} else if (toPlayerStatus && fromPlayerStatus) {
-					final Component component = Component.text("§6" + String.valueOf(counter));
+					final Component component = Component.text("§6" + counter);
 					fromPlayer.showTitle(Title.title(component, Component.empty()));
 					toPlayer.showTitle(Title.title(component, Component.empty()));
 					toPlayer.playSound(Sound.sound(org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, Sound.Source.AMBIENT, 1.0f, 0.5f));

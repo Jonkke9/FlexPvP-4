@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 
-
 import java.util.Iterator;
 
 public final class UlamSpiral implements Iterator<Location> {
@@ -12,7 +11,7 @@ public final class UlamSpiral implements Iterator<Location> {
 	private final Location center;
 	private final int stepSize;
 
-	private Location loc;
+	private final Location loc;
 	private int step = 0;
 	private int stepsPerSide = 1;
 	private BlockFace direction = BlockFace.EAST;

@@ -1,14 +1,14 @@
 package fi.flexplex.pvp.game.playerdata;
 
+import fi.flexplex.core.Main;
 import fi.flexplex.core.api.Leaderboard;
-import fi.flexplex.core.module.leaderboard.LeaderboardModule;
 import fi.flexplex.pvp.game.arena.Arena;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public final class PlayerData {
 
@@ -37,52 +37,40 @@ public final class PlayerData {
 
 	private int currentStreak = 0;
 
-	protected PlayerData(final Player player, final Arena arena) {
+	PlayerData(final Player player, final Arena arena) {
 		this.player = player;
 		this.arena = arena;
-		loadStats();
-	}
 
-	protected void loadStats() {
 		final UUID uuid = player.getUniqueId();
 
-		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.KILLS)).whenComplete((kills, throwable) -> {
-			if (throwable == null) {
-				killsAllTime = kills.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				killsThisMonth = kills.getScore(LeaderboardModule.Timeframe.MONTHLY);
-			}
+
+		Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+
+			//kills
+			killsAllTime = Leaderboard.getScore(uuid, Leaderboard.Key.KILLS, Leaderboard.Timeframe.ALL_TIME);
+			killsThisMonth = Leaderboard.getScore(uuid, Leaderboard.Key.KILLS, Leaderboard.Timeframe.MONTHLY);
+
+			//deaths
+			deathsAllTime = Leaderboard.getScore(uuid, Leaderboard.Key.DEATHS, Leaderboard.Timeframe.ALL_TIME);
+			deathsThisMonth = Leaderboard.getScore(uuid, Leaderboard.Key.DEATHS, Leaderboard.Timeframe.MONTHLY);
+
+			//top streak
+			topStreakAllTime = Leaderboard.getScore(uuid, Leaderboard.Key.TOP_STREAK, Leaderboard.Timeframe.ALL_TIME);
+			topStreakThisMonth = Leaderboard.getScore(uuid, Leaderboard.Key.TOP_STREAK, Leaderboard.Timeframe.MONTHLY);
+
+			//wins
+			winsAllTime = Leaderboard.getScore(uuid, Leaderboard.Key.WINS, Leaderboard.Timeframe.ALL_TIME);
+			winsThisMonth = Leaderboard.getScore(uuid, Leaderboard.Key.WINS, Leaderboard.Timeframe.MONTHLY);
+
+			//loses
+			losesAllTime = Leaderboard.getScore(uuid, Leaderboard.Key.LOSES, Leaderboard.Timeframe.ALL_TIME);
+			losesThisMonth = Leaderboard.getScore(uuid, Leaderboard.Key.LOSES, Leaderboard.Timeframe.ALL_TIME);
+
 		});
 
-		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.DEATHS)).whenComplete((deaths, throwable) -> {
-			if (throwable == null) {
-				deathsAllTime = deaths.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				deathsThisMonth = deaths.getScore(LeaderboardModule.Timeframe.MONTHLY);
-			}
-		});
-
-		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.TOP_STREAK)).whenComplete((topStreak, throwable) -> {
-			if (throwable == null) {
-				topStreakAllTime = topStreak.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				topStreakThisMonth = topStreak.getScore(LeaderboardModule.Timeframe.MONTHLY);
-			}
-		});
-
-		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.WINS)).whenComplete((wins, throwable) -> {
-			if (throwable == null) {
-				winsAllTime = wins.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				winsThisMonth = wins.getScore(LeaderboardModule.Timeframe.MONTHLY);
-			}
-		});
-
-		CompletableFuture.supplyAsync(() -> Leaderboard.getScore(uuid, Leaderboard.Key.LOSES)).whenComplete((loses, throwable) -> {
-			if (throwable == null) {
-				losesAllTime = loses.getScore(LeaderboardModule.Timeframe.ALL_TIME);
-				losesThisMonth = loses.getScore(LeaderboardModule.Timeframe.MONTHLY);
-			}
-		});
 	}
 
-	protected void onFfaKill() {
+	void onFfaKill() {
 		killsAllTime++;
 		killsThisMonth++;
 		killsThisSession++;
@@ -99,7 +87,7 @@ public final class PlayerData {
 		}
 	}
 
-	protected void onFfaDeath() {
+	void onFfaDeath() {
 		deathsAllTime++;
 		deathsThisMonth++;
 		deathsThisSession++;
@@ -107,12 +95,12 @@ public final class PlayerData {
 		currentStreak = 0;
 	}
 
-	protected void onRankedDuelWin() {
+	void onRankedDuelWin() {
 		winsAllTime++;
 		winsThisMonth++;
 	}
 
-	protected void onRankedDuelLose() {
+	void onRankedDuelLose() {
 		losesAllTime++;
 		losesAllTime++;
 	}
@@ -143,7 +131,6 @@ public final class PlayerData {
 		}
 		return ArenaManager.getLobby();
 	}
-
 
 	public int getKills(final PlayerDataManager.TimeFrame timeFrame) {
 		switch (timeFrame) {

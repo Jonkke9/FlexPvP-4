@@ -1,11 +1,11 @@
 package fi.flexplex.pvp.command;
 
 import fi.flexplex.core.api.Language;
-import fi.flexplex.pvp.game.kit.Kit;
-import fi.flexplex.pvp.game.kit.KitManager;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.arena.FfaArena;
 import fi.flexplex.pvp.game.arena.Lobby;
+import fi.flexplex.pvp.game.kit.Kit;
+import fi.flexplex.pvp.game.kit.KitManager;
 import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.menus.FFAKitSelector;
@@ -23,12 +23,11 @@ public final class FfaCmd implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
 
-		final Player player = (Player) sender;
 		final PlayerData data = PlayerDataManager.getPlayerData(player);
 
 		if (!(data.getArena() instanceof Lobby)) {

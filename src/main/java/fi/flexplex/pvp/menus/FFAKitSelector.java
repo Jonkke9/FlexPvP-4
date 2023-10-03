@@ -1,10 +1,11 @@
 package fi.flexplex.pvp.menus;
 
-import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.arena.ArenaManager;
+import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.misc.Util;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
 public final class FFAKitSelector extends Menu {
 
@@ -18,6 +19,7 @@ public final class FFAKitSelector extends Menu {
 		int slot = 0;
 		for (final Kit kit : ArenaManager.getFfaArena().getAllowedKits()) {
 			this.setItem(kit.getIcon(p), slot, (type) -> {
+				p.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
 				ArenaManager.getFfaArena().send(p, kit);
 			});
 			slot++;

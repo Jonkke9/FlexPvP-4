@@ -15,11 +15,10 @@ public final class LocationToolCmd implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
-		final Player player = (Player) sender;
 
 		if (!player.isOp()) {
 			Language.sendMessage(player, "NO_PERMISSIONS_TO_COMMAND");

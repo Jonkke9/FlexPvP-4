@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +55,13 @@ public final class Kit {
 	public void deploy(final Player player) {
 		final Inventory inv = player.getInventory();
 		inv.clear();
+
+		if (player.getOpenInventory().getTopInventory() instanceof CraftingInventory cinv) {
+			if (cinv.getMatrix().length == 4) {
+				cinv.clear();
+			}
+		}
+
 		inv.setContents(contents);
 		player.addPotionEffects(potionEffects);
 	}
@@ -83,6 +91,7 @@ public final class Kit {
 		 armorStand.setPersistent(false);
 		 armorStand.setArms(true);
 		 armorStand.setAI(false);
+		 armorStand.setBasePlate(false);
 
 		 armorStand.setItem(EquipmentSlot.OFF_HAND, contents[40]);
 		 armorStand.setItem(EquipmentSlot.HEAD, contents[39]);

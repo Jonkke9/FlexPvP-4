@@ -17,12 +17,10 @@ public class DuelsAcceptCmd implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String s, final String[] args) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
-
-		final Player player = (Player) sender;
 
 		if (Duels.isInDuel(player)) {
 			Language.sendMessage(sender, "PVP_DUELS_CANNOT_SEND");

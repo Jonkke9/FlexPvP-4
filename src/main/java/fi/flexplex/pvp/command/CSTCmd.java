@@ -3,13 +3,11 @@ package fi.flexplex.pvp.command;
 import fi.flexplex.core.api.Language;
 import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
-import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -19,12 +17,11 @@ public final class CSTCmd implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
 
-		final Player player = (Player) sender;
 		final PlayerData data = PlayerDataManager.getPlayerData(player);
 
 

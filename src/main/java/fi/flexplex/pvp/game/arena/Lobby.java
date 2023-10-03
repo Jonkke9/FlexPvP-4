@@ -2,8 +2,8 @@ package fi.flexplex.pvp.game.arena;
 
 import fi.flexplex.core.api.FlexPlayer;
 import fi.flexplex.pvp.Main;
-import fi.flexplex.pvp.game.kit.KitManager;
 import fi.flexplex.pvp.game.kit.Kit;
+import fi.flexplex.pvp.game.kit.KitManager;
 import fi.flexplex.pvp.misc.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

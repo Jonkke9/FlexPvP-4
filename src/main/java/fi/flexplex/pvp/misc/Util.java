@@ -2,9 +2,11 @@ package fi.flexplex.pvp.misc;
 
 import fi.flexplex.core.api.FlexPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -52,12 +54,20 @@ public final class Util {
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		return "TOPLIST_MONTH_" + String.valueOf(calendar.get(Calendar.MONTH) + 1);
+		return "TOPLIST_MONTH_" + (calendar.get(Calendar.MONTH) + 1);
 	}
 	public static int getYear() {
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.YEAR);
+	}
+
+	public static void totemEffect(final Player player) {
+		player.playEffect(EntityEffect.TOTEM_RESURRECT);
+		player.setHealth(1.0);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100, 2));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 45 * 20, 2));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40 * 20, 1));
 	}
 }

@@ -119,13 +119,13 @@ public final class PvpScoreboard {
 		String string = " ";
 		switch (playerData.timeFrame()) {
 			case THIS_SESSION -> {
-				string = Language.getStringMessage(playerData.player(), "TOPLIST_SESSION");
+				string = Language.getStringMessage(playerData.player(), "PVP_STAT_TIMEFRAME_THIS_SESSION");
 			}
 			case MONTHLY -> {
-				string = Language.getStringMessage(playerData.player(), Util.getCurrentMonthKey()) + " " + String.valueOf(Util.getYear());
+				string = Language.getStringMessage(playerData.player(), Util.getCurrentMonthKey()) + " " + Util.getYear();
 			}
 			case ALL_TIME -> {
-				string = Language.getStringMessage(playerData.player(), "TOPLIST_ALL_TIME");
+				string = Language.getStringMessage(playerData.player(), "PVP_STAT_TIMEFRAME_ALL_TIME");
 			}
 		}
 		return "§8(" + string + ")";

@@ -96,10 +96,10 @@ public final class DuelArenaTemplate {
 		}
 	}
 
-	protected DuelArena buildArena(final Location bounds1) {
+	DuelArena buildArena(final Location bounds1) {
 		final Location bounds2 = bounds1.clone().add(this.sizeX, this.sizeY, this.sizeZ);
 		final Location[] locations = new Location[this.normalizedLocations.length];
-		final String name = this.name + "-" + String.valueOf(this.id++);
+		final String name = this.name + "-" + this.id++;
 
 		for (int i = 0; i < this.normalizedLocations.length; i++) {
 
@@ -120,7 +120,7 @@ public final class DuelArenaTemplate {
 	}
 
 
-	protected int getAmountOfSlices() {
+	int getAmountOfSlices() {
 		return this.slices;
 	}
 

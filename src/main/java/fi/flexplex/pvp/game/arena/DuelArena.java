@@ -4,14 +4,12 @@ import fi.flexplex.pvp.game.duel.Duel;
 import fi.flexplex.pvp.game.duel.DuelState;
 import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
-import org.bukkit.EntityEffect;
+import fi.flexplex.pvp.misc.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public final class DuelArena extends PvpArena{
 
@@ -56,11 +54,11 @@ public final class DuelArena extends PvpArena{
 	public void onDeath(final Player victim, final Player killer) {
 		if (victim.getInventory().getItemInOffHand().getType() == Material.TOTEM_OF_UNDYING) {
 			victim.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
-			totemEffect(victim);
+			Util.totemEffect(victim);
 			return;
 		} else if (victim.getInventory().getItemInMainHand().getType() == Material.TOTEM_OF_UNDYING) {
 			victim.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-			totemEffect(victim);
+			Util.totemEffect(victim);
 			return;
 		}
 		if (activeDuel != null) {
@@ -110,12 +108,4 @@ public final class DuelArena extends PvpArena{
 		return template;
 	}
 
-
-	private void totemEffect(final Player player) {
-		player.playEffect(EntityEffect.TOTEM_RESURRECT);
-		player.setHealth(1.0);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100, 2));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 45 * 20, 2));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40 * 20, 1));
-	}
 }

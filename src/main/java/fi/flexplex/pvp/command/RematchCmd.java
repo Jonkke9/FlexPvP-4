@@ -18,12 +18,11 @@ public class RematchCmd implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String s, final String[] strings) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Language.sendMessage(sender, "PLAYER_ONLY_COMMAND");
 			return false;
 		}
 
-		final Player player = (Player) sender;
 		final Duel duel = Duels.getPlayerDuel(player);
 
 		if (duel == null || duel.getState() != DuelState.WAITING) {

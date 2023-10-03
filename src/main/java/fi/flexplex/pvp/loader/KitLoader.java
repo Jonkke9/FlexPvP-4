@@ -64,11 +64,11 @@ public final class KitLoader {
 			final List<ItemStack> contentsList = new ArrayList<>();
 
 			for (int i = 0; i < 9; i++) {
-				contentsList.add(config.getItemStack("hotbar.slot" + String.valueOf(i)));
+				contentsList.add(config.getItemStack("hotbar.slot" + i));
 			}
 
 			for (int i = 0; i < 27; i++) {
-				contentsList.add(config.getItemStack("storage.slot" + String.valueOf(i)));
+				contentsList.add(config.getItemStack("storage.slot" + i));
 			}
 
 			contentsList.add(config.getItemStack("armor.boots"));

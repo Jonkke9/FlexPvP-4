@@ -1,29 +1,28 @@
 package fi.flexplex.pvp;
 
 import fi.flexplex.core.api.Language;
-
-import java.io.File;
-import java.util.List;
-
 import fi.flexplex.pvp.command.CSTCmd;
 import fi.flexplex.pvp.command.DuelInviteCmd;
 import fi.flexplex.pvp.command.DuelsAcceptCmd;
+import fi.flexplex.pvp.command.FfaCmd;
+import fi.flexplex.pvp.command.LocationToolCmd;
 import fi.flexplex.pvp.command.RematchCmd;
 import fi.flexplex.pvp.command.SpawnCmd;
 import fi.flexplex.pvp.game.arena.ArenaManager;
-import fi.flexplex.pvp.command.FfaCmd;
 import fi.flexplex.pvp.listener.DamageListener;
 import fi.flexplex.pvp.listener.FlexDeathMessageListener;
-import fi.flexplex.pvp.listener.PvPListener;
 import fi.flexplex.pvp.listener.JoinAndLeaveListener;
+import fi.flexplex.pvp.listener.PvPListener;
 import fi.flexplex.pvp.listener.WorldProtectListener;
 import fi.flexplex.pvp.loader.ArenaLoader;
 import fi.flexplex.pvp.loader.ConfigLoader;
 import fi.flexplex.pvp.loader.KitLoader;
-import fi.flexplex.pvp.command.LocationToolCmd;
 import fi.flexplex.pvp.misc.world.WorldUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.List;
 
 
 public final class Main extends JavaPlugin {

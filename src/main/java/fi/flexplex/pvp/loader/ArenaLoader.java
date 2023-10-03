@@ -1,13 +1,11 @@
 package fi.flexplex.pvp.loader;
 
 import fi.flexplex.pvp.Main;
-import fi.flexplex.pvp.game.arena.Arena;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.arena.DuelArenaTemplate;
-import fi.flexplex.pvp.game.kit.Kit;
-
 import fi.flexplex.pvp.game.arena.FfaArena;
 import fi.flexplex.pvp.game.arena.Lobby;
+import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.kit.KitManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -136,7 +134,7 @@ public final class ArenaLoader {
 		final List<Location> locations = new ArrayList<>();
 		int index = 1;
 		while (true) {
-			final String locationString = section.getString("loc" + String.valueOf(index));
+			final String locationString = section.getString("loc" + index);
 
 			if (locationString == null) {
 				break;

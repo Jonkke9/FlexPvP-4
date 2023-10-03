@@ -45,7 +45,7 @@ public final class WorldUtils {
 		world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
 		world.setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, false);
 		world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
-		world.setDifficulty(Difficulty.PEACEFUL);
+		world.setDifficulty(Difficulty.EASY);
 
 		return world;
 	}
