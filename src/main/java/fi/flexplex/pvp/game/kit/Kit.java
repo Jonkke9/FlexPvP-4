@@ -2,6 +2,7 @@ package fi.flexplex.pvp.game.kit;
 
 import fi.flexplex.core.api.Hologram;
 import fi.flexplex.core.api.Language;
+import fi.flexplex.pvp.misc.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -54,7 +55,6 @@ public final class Kit {
 
 	public void deploy(final Player player) {
 		final Inventory inv = player.getInventory();
-		inv.clear();
 
 		if (player.getOpenInventory().getTopInventory() instanceof CraftingInventory cinv) {
 			if (cinv.getMatrix().length == 4) {

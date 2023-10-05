@@ -12,6 +12,7 @@ public class DuelArenaBuildTask extends BukkitRunnable {
 	private final Location loc;
 	private final World world;
 	private final DuelArena arena;
+	private final int speed;
 	private final Iterator<BlockDataLocation> iterator;
 	private int duration = 0;
 
@@ -21,11 +22,12 @@ public class DuelArenaBuildTask extends BukkitRunnable {
 		this.arena = arena;
 		this.iterator = template.getBlocks().iterator();
 		this.duration = template.getAmountOfSlices();
+		speed = ArenaManager.getGenerationSpeed();
 	}
 
 	@Override
 	public void run() {
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < speed; i++) {
 			if (!iterator.hasNext()) {
 				ArenaManager.removeBuildTask(this);
 				this.arena.setReady(true);

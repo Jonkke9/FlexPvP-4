@@ -15,6 +15,7 @@ public final class UlamSpiral implements Iterator<Location> {
 	private int step = 0;
 	private int stepsPerSide = 1;
 	private BlockFace direction = BlockFace.EAST;
+	private int index = 0;
 
 	public UlamSpiral(final  World world, int stepSize) {
 		center = new Location(world, -1 * stepSize, 0, 0);
@@ -47,12 +48,17 @@ public final class UlamSpiral implements Iterator<Location> {
 
 			step = 0;
 		}
+		index++;
 		return loc.clone();
 	}
 
 	@Override
 	public boolean hasNext() {
 		return true;
+	}
+
+	public int getIndex() {
+		return index;
 	}
 
 

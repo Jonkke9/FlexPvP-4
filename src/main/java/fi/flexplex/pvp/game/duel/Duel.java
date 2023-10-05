@@ -239,8 +239,8 @@ public final class Duel implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(final PlayerMoveEvent event) {
-		if (state == DuelState.COUNTDOWN) {
-			if (arena.getPlayers().contains(event.getPlayer())) {
+		if (arena.getPlayers().contains(event.getPlayer())) {
+			if (state == DuelState.COUNTDOWN) {
 				event.setTo(new Location(
 						event.getFrom().getWorld(),
 						event.getFrom().getX(),
@@ -249,6 +249,10 @@ public final class Duel implements Listener {
 						event.getTo().getYaw(),
 						event.getTo().getPitch()
 				));
+			} else if (state == DuelState.ACTIVE){
+				if (!Util.isInArea(event.getTo(), arena.getBounds1(), arena.getBounds2())) {
+					onLeave(event.getPlayer());
+				}
 			}
 		}
 	}

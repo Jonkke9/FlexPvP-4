@@ -6,6 +6,7 @@ import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.EntityType;
@@ -15,9 +16,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 public final class PvPListener implements Listener {
 
@@ -78,6 +81,11 @@ public final class PvPListener implements Listener {
 	@EventHandler
 	public void onPlayerInterectAtEntity(final PlayerInteractAtEntityEvent event) {
 		event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onInventoryClose(final InventoryCloseEvent event) {
+		event.getView().setCursor(new ItemStack(Material.AIR));
 	}
 
 }

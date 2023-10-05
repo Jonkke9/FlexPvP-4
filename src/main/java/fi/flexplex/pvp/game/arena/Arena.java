@@ -74,5 +74,12 @@ public abstract class Arena {
 
 	abstract void onLeave(final Player player, final boolean causeDeath);
 
+	public Location getBounds1() {
+		return bounds1;
+	}
+
+	public Location getBounds2() {
+		return bounds2;
+	}
 
 }

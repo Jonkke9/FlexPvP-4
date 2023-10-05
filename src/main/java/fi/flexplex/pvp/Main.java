@@ -52,7 +52,7 @@ public final class Main extends JavaPlugin {
 		loadLanguages();
 		KitLoader.LoadAllKits();
 		ArenaLoader.loadAllArenas();
-		//ArenaManager.createAllDuelArenas();
+		ArenaManager.createAllDuelArenas();
 
 		this.getCommand("location").setExecutor(new LocationToolCmd());
 

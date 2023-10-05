@@ -22,12 +22,13 @@ public class ArenaManager {
 	private static final HashMap<String, DuelArenaTemplate> TEMPLATES = new HashMap<>();
 	private static final Set<DuelArenaBuildTask> BUILD_TASKS = new HashSet<>();
 
-
 	private static final World DUEL_WORLD = WorldUtils.createEmptyWorld();
 	private static final UlamSpiral SPIRAL = new UlamSpiral(DUEL_WORLD, 101);
 
 	private static Lobby lobby = null;
 	private static FfaArena activeFfaArena = null;
+
+	private static int GEN_SPEED = 500;
 
 	public static void addArena(final Arena arena) {
 		ARENAS.putIfAbsent(arena.getName(), arena);
@@ -140,10 +141,15 @@ public class ArenaManager {
 				ARENAS.putIfAbsent(arena.getName(), arena);
 			}
 		}
+		GEN_SPEED = 500;
 	}
 
 	public static Collection<DuelArenaTemplate> getAllDuelArenaTemplates() {
 		return TEMPLATES.values();
+	}
+
+	public static int getGenerationSpeed() {
+		return GEN_SPEED;
 	}
 
 }

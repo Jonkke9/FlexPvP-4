@@ -23,7 +23,6 @@ public final class DuelArenaTemplate {
 
 	private int id = 0;
 	private final int amount;
-	private final int slices;
 	private final String name;
 	final int sizeX, sizeY, sizeZ;
 	private final String displayNameKey;
@@ -71,12 +70,6 @@ public final class DuelArenaTemplate {
 			normalizedLocations[i] = locations[i].add(-1.0 * smallest.getX(), -1.0 * smallest.getY(), -1.0 * smallest.getZ());
 		}
 
-		if ((sizeX * sizeY * sizeZ) % 100 > 0) {
-			this.slices = ((sizeX * sizeY * sizeZ) / 500) + 1;
-		} else {
-			this.slices = ((sizeX * sizeY * sizeZ) / 500);
-		}
-
 		this.normalizedLocations = normalizedLocations;
 		this.displayMaterial = displayMaterial;
 		this.displayNameKey = displayNameKey;
@@ -121,7 +114,11 @@ public final class DuelArenaTemplate {
 
 
 	int getAmountOfSlices() {
-		return this.slices;
+		if ((sizeX * sizeY * sizeZ) % 100 > 0) {
+			return ((sizeX * sizeY * sizeZ) / ArenaManager.getGenerationSpeed()) + 1;
+		} else {
+			return ((sizeX * sizeY * sizeZ) / ArenaManager.getGenerationSpeed());
+		}
 	}
 
 	public String getName() {
