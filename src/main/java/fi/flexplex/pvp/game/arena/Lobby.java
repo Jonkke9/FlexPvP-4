@@ -1,9 +1,12 @@
 package fi.flexplex.pvp.game.arena;
 
 import fi.flexplex.core.api.FlexPlayer;
+import fi.flexplex.core.api.Teleport;
 import fi.flexplex.pvp.Main;
 import fi.flexplex.pvp.game.kit.Kit;
 import fi.flexplex.pvp.game.kit.KitManager;
+import fi.flexplex.pvp.game.playerdata.PlayerData;
+import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.misc.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,14 +22,12 @@ import java.util.HashMap;
 
 public final class Lobby extends Arena implements Listener {
 
-	private final Location spawn;
 	private final HashMap<String, Location> kitSelectorLocations;
 	private final HashMap<ArmorStand, String> kitSelectors = new HashMap<>();
 
 
-	public Lobby(final String name, final Location bounds1, final Location bounds2, final Location spawn, final HashMap<String, Location> kitSelectorLocations) {
+	public Lobby(final String name, final Location bounds1, final Location bounds2, final HashMap<String, Location> kitSelectorLocations) {
 		super(name, bounds1, bounds2);
-		this.spawn = spawn;
 		this.kitSelectorLocations = kitSelectorLocations;
 		this.createArmorStands();
 		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
@@ -34,9 +35,8 @@ public final class Lobby extends Arena implements Listener {
 
 	@Override
 	void onJoin(final Player player) {
-		player.teleport(this.spawn);
+		player.teleport(Teleport.getSpawnLocation());
 		player.setGameMode(this.gameMode);
-		Util.resetPlayer(player);
 		FlexPlayer.getPlayer(player).setHotbarItemsActive(true);
 	}
 
@@ -56,12 +56,6 @@ public final class Lobby extends Arena implements Listener {
 		}
 	}
 
-	public void removeKitSelectors() {
-		for (final ArmorStand stand : this.kitSelectors.keySet()) {
-			stand.remove();
-		}
-	}
-
 	@EventHandler
 	public void onPlayerInterectAtEntity(final PlayerInteractAtEntityEvent event) {
 		if (event.getRightClicked().getType() == EntityType.ARMOR_STAND) {
@@ -72,5 +66,4 @@ public final class Lobby extends Arena implements Listener {
 			}
 		}
 	}
-
 }

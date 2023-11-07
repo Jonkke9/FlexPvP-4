@@ -19,12 +19,12 @@ import java.util.Set;
 public final class Util {
 
 	public static void resetPlayer(final Player player) {
-		player.setGlowing(false);
 		player.getInventory().clear();
 		player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		player.getOpenInventory().setCursor(null);
 		player.setFoodLevel(20);
 		player.setLevel(0);
+		player.setGlowing(false);
 
 		if (player.getOpenInventory().getTopInventory() instanceof CraftingInventory cinv) {
 			if (cinv.getMatrix().length == 4) {

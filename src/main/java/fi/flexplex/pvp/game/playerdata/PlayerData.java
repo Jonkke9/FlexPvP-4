@@ -7,12 +7,15 @@ import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.UUID;
 
 public final class PlayerData {
 
 	private final Player player;
+	private final PermissionAttachment attachment;
+
 
 	private Arena arena = null;
 	private PlayerDataManager.TimeFrame timeFrame = PlayerDataManager.TimeFrame.MONTHLY;
@@ -38,6 +41,7 @@ public final class PlayerData {
 	private int currentStreak = 0;
 
 	PlayerData(final Player player, final Arena arena) {
+		this.attachment = player.addAttachment(fi.flexplex.pvp.Main.getInstance());
 		this.player = player;
 		this.arena = arena;
 
@@ -217,5 +221,9 @@ public final class PlayerData {
 
 	public Player player() {
 		return player;
+	}
+
+	public PermissionAttachment getAttachment() {
+		return attachment;
 	}
 }

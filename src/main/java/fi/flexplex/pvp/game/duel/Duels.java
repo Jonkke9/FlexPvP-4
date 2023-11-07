@@ -2,7 +2,6 @@ package fi.flexplex.pvp.game.duel;
 
 import fi.flexplex.core.api.FlexPlayer;
 import fi.flexplex.core.api.Language;
-import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.Main;
 import fi.flexplex.pvp.game.kit.Kit;
 import net.kyori.adventure.text.Component;
@@ -50,7 +49,7 @@ public final class Duels {
 		Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> INVITES.remove(invite), 3000);
 
 		sendInviteMessage(invite);
-		Language.sendMessage(from, "PVP_DUELS_INVITE_SENT", Permissions.getLegacyDisplayName(to));
+		Language.sendMessage(from, "PVP_DUELS_INVITE_SENT", FlexPlayer.getPlayer(to).getLegacyDisplayName());
 	}
 
 	public static int countInvitesFrom(final Player player) {
@@ -128,7 +127,7 @@ public final class Duels {
 		lines.add(Language.getMessage(player, "PVP_DUELS_INVITE_CLICK"));
 
 		final TextComponent component = Component.text()
-				.content(Language.getStringMessage(player, "PVP_DUELS_INVITE_RECEIVED", Permissions.getLegacyDisplayName(invite.getFrom())))
+				.content(Language.getStringMessage(player, "PVP_DUELS_INVITE_RECEIVED", FlexPlayer.getPlayer(invite.getFrom()).getLegacyDisplayName()))
 				.hoverEvent(HoverEvent.showText(Component.join(JoinConfiguration.newlines(), lines)))
 				.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND,"/duelsaccept " + invite.getFrom().getName()))
 				.build();

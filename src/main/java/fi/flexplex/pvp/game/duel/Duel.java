@@ -1,11 +1,12 @@
 package fi.flexplex.pvp.game.duel;
 
+import fi.flexplex.core.api.FlexPlayer;
 import fi.flexplex.core.api.Language;
-import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.Main;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.arena.DuelArena;
 import fi.flexplex.pvp.game.kit.Kit;
+import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.menus.DuelsKitSelector;
 import fi.flexplex.pvp.misc.Util;
@@ -168,8 +169,8 @@ public final class Duel implements Listener {
 
 		onWin(killer, player);
 
-		Language.sendMessage(killer, "PVP_DUELS_VICTORY", Permissions.getLegacyDisplayName(player));
-		Language.sendMessage(player, "PVP_DUELS_DEFEAT", Permissions.getLegacyDisplayName(killer));
+		Language.sendMessage(killer, "PVP_DUELS_VICTORY", FlexPlayer.getPlayer(player).getLegacyDisplayName());
+		Language.sendMessage(player, "PVP_DUELS_DEFEAT", FlexPlayer.getPlayer(killer).getLegacyDisplayName());
 
 		killer.playSound(Sound.sound(org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, Sound.Source.AMBIENT, 1.0f, 1.0f));
 		player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_BLAZE_DEATH, Sound.Source.AMBIENT, 1.0f, 1.0f));
@@ -204,8 +205,16 @@ public final class Duel implements Listener {
 		arena.activate(settings.regenSpeed());
 		Duels.activateDuel(this);
 		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
-		PlayerDataManager.getPlayerData(fromPlayer).changeArena(arena, true);
-		PlayerDataManager.getPlayerData(toPlayer).changeArena(arena, true);
+
+		final PlayerData fromData = PlayerDataManager.getPlayerData(fromPlayer);
+		final PlayerData toData = PlayerDataManager.getPlayerData(toPlayer);
+
+		fromData.changeArena(arena, true);
+		toData.changeArena(arena, true);
+
+		fromData.getAttachment().setPermission("flexcore.bypasstpdelay", true);
+		toData.getAttachment().setPermission("flexcore.bypasstpdelay", true);
+
 		onRoundStart();
 	}
 
@@ -225,12 +234,24 @@ public final class Duel implements Listener {
 		arena.deActivate();
 		if (toPlayer.isOnline()) {
 			PvpScoreboard.clearDuelsScoreboards(toPlayer);
-			PlayerDataManager.getPlayerData(toPlayer).changeArena(ArenaManager.getLobby());
+			final PlayerData data = PlayerDataManager.getPlayerData(toPlayer);
+
+			if (data.getArena() == arena) {
+				data.changeArena(ArenaManager.getLobby());
+			}
+
+			data.getAttachment().unsetPermission("flexcore.bypasstpdelay");
 		}
 
 		if (fromPlayer.isOnline()) {
 			PvpScoreboard.clearDuelsScoreboards(fromPlayer);
-			PlayerDataManager.getPlayerData(fromPlayer).changeArena(ArenaManager.getLobby());
+			final PlayerData data = PlayerDataManager.getPlayerData(fromPlayer);
+
+			if (data.getArena() == arena) {
+				data.changeArena(ArenaManager.getLobby());
+			}
+
+			data.getAttachment().unsetPermission("flexcore.bypasstpdelay");
 		}
 		arena.setDuel(null);
 		Duels.deActivateDuel(this);
@@ -297,8 +318,8 @@ public final class Duel implements Listener {
 	}
 
 	private void tieAnnouncement() {
-		final String from = Permissions.getLegacyDisplayName(fromPlayer);
-		final String to = Permissions.getLegacyDisplayName(toPlayer);
+		final String from = FlexPlayer.getPlayer(fromPlayer).getLegacyDisplayName();
+		final String to = FlexPlayer.getPlayer(toPlayer).getLegacyDisplayName();
 		final String score = String.valueOf(fromPlayerScore);
 		for (final Player player : Bukkit.getOnlinePlayers()) {
 			Language.sendMessage(player, "PVP_DUELS_ANNOUNCE_TIE", from, to, score, score);
@@ -307,8 +328,8 @@ public final class Duel implements Listener {
 	}
 
 	private void victoryAnnouncement(final Player winner, final Player loser, final int winnerScore, final int loserScore) {
-		final String winnerName = Permissions.getLegacyDisplayName(winner);
-		final String loserName = Permissions.getLegacyDisplayName(loser);
+		final String winnerName = FlexPlayer.getPlayer(winner).getLegacyDisplayName();
+		final String loserName = FlexPlayer.getPlayer(loser).getLegacyDisplayName();
 		final String winnersScoreS = toString().valueOf(winnerScore);
 		final String losersScoreS = toString().valueOf(loserScore);
 		for (final Player player : Bukkit.getOnlinePlayers()) {
@@ -319,10 +340,10 @@ public final class Duel implements Listener {
 	public void rematchRequest(final Player player) {
 		if (player == toPlayer) {
 			toPlayerRematch = true;
-			Language.sendMessage(fromPlayer, "PVP_DUELS_REMATCH_RECEIVED", Permissions.getLegacyDisplayName(toPlayer));
+			Language.sendMessage(fromPlayer, "PVP_DUELS_REMATCH_RECEIVED", FlexPlayer.getPlayer(toPlayer).getLegacyDisplayName());
 		} else if (player == fromPlayer) {
 			fromPlayerRematch = true;
-			Language.sendMessage(toPlayer, "PVP_DUELS_REMATCH_RECEIVED", Permissions.getLegacyDisplayName(fromPlayer));
+			Language.sendMessage(toPlayer, "PVP_DUELS_REMATCH_RECEIVED", FlexPlayer.getPlayer(fromPlayer).getLegacyDisplayName());
 		} else return;
 
 		if (toPlayerRematch && fromPlayerRematch) {

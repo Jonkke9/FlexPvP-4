@@ -3,6 +3,7 @@ package fi.flexplex.pvp.listener;
 import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.duel.Duels;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
+import fi.flexplex.pvp.misc.Util;
 import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,7 @@ public final class JoinAndLeaveListener implements Listener {
 	@EventHandler()
 	public void onJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
+		Util.resetPlayer(player);
 		PlayerDataManager.onJoin(player);
 		ArenaManager.getLobby().addPlayer(player);
 		PvpScoreboard.updateFFAListScore(player);

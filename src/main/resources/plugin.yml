@@ -10,9 +10,9 @@ depend: [FlexCore]
 
 commands:
   location:
+    permission: pvp.location
   ffa:
   cst:
-  spawn:
   duelsinvite:
   advancedduelsinvite:
   duelsaccept:

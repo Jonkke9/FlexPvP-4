@@ -54,6 +54,7 @@ public final class Kit {
 
 
 	public void deploy(final Player player) {
+		Util.resetPlayer(player);
 		final Inventory inv = player.getInventory();
 
 		if (player.getOpenInventory().getTopInventory() instanceof CraftingInventory cinv) {

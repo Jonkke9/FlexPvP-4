@@ -1,6 +1,7 @@
 package fi.flexplex.pvp.game.arena;
 
 import fi.flexplex.core.api.Language;
+import fi.flexplex.pvp.misc.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -50,10 +51,7 @@ public abstract class Arena {
 	//try to use PlayerData.changeArena() instead if possible. these are only mend to be used when player logs in or out
 	public boolean addPlayer(final Player player) {
 		players.add(player);
-		player.getInventory().clear();
-		for (final PotionEffect effect : player.getActivePotionEffects()) {
-			player.removePotionEffect(effect.getType());
-		}
+		Util.resetPlayer(player);
 		onJoin(player);
 		return true;
 	}
@@ -80,6 +78,10 @@ public abstract class Arena {
 
 	public Location getBounds2() {
 		return bounds2;
+	}
+
+	public boolean hasSpawnDelay() {
+		return false;
 	}
 
 }

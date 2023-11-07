@@ -91,7 +91,7 @@ public final class ArenaLoader {
 				}
 			}
 		}
-		final Lobby lobby = new Lobby(name, bounds1, bounds2, spawn, kitSelectorLocations);
+		final Lobby lobby = new Lobby(name, bounds1, bounds2, kitSelectorLocations);
 
 		if (ArenaManager.getLobby() != null) {
 			return null;

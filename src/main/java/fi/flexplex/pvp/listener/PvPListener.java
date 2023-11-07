@@ -1,6 +1,9 @@
 package fi.flexplex.pvp.listener;
 
+import fi.flexplex.core.api.event.PreTeleportEvent;
+import fi.flexplex.core.api.event.TeleportEvent;
 import fi.flexplex.pvp.Main;
+import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
@@ -86,6 +89,22 @@ public final class PvPListener implements Listener {
 	@EventHandler
 	public void onInventoryClose(final InventoryCloseEvent event) {
 		event.getView().setCursor(new ItemStack(Material.AIR));
+	}
+
+	@EventHandler
+	public void onPlayerTeleport(final TeleportEvent event) {
+		if (event.getCause() == TeleportEvent.TeleportCause.SPAWN_COMMAND) {
+			PlayerDataManager.getPlayerData(event.getPlayer()).changeArena(ArenaManager.getLobby());
+		}
+	}
+
+	@EventHandler
+	public void onPreTeleportEvent(final PreTeleportEvent event) {
+		if(event.getCause() == TeleportEvent.TeleportCause.SPAWN_COMMAND) {
+			if (!PlayerDataManager.getPlayerData(event.getPlayer()).getArena().hasSpawnDelay()) {
+				event.setDelay(0);
+			}
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package fi.flexplex.pvp.game.arena;
 
+import fi.flexplex.core.api.FlexPlayer;
 import fi.flexplex.core.api.Language;
 import fi.flexplex.core.api.Permissions;
 import fi.flexplex.pvp.Main;
@@ -10,6 +11,10 @@ import fi.flexplex.pvp.menus.FFAKitSelector;
 import fi.flexplex.pvp.misc.Util;
 import fi.flexplex.pvp.misc.scoreboard.PvpScoreboard;
 import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,6 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,11 +40,18 @@ public final class FfaArena extends PvpArena {
 	private final List<Kit> allowedKits = new ArrayList<>();
 	private final List<Location> spawnLocations;
 	private final Random rand = new Random();
+	private final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+
+	private Team starPlayerTeam;
 
 	public FfaArena(final String name, final Location bounds1, final Location bounds2, final List<Kit> allowedKits, final List<Location> spawnLocations) {
 		super(name, bounds1, bounds2);
 		this.allowedKits.addAll(allowedKits);
 
+
+		starPlayerTeam = scoreboard.registerNewTeam("000StarPlayer");
+		starPlayerTeam.suffix(Component.text(" §e✰"));
+		starPlayerTeam.color(NamedTextColor.YELLOW);
 		Collections.sort(this.allowedKits, new Comparator<Kit>() {
 			@Override
 			public int compare(final Kit o1, final Kit o2) {
@@ -48,14 +62,12 @@ public final class FfaArena extends PvpArena {
 		this.spawnLocations = spawnLocations;
 
 		Bukkit.getScheduler().runTaskTimer(Main.getInstance(), () -> {
-			//TODO: .....
 			for (final Player player : this.players) {
 				if (player.getKiller() != null && player.getKiller() != player) {
 					player.sendActionBar(Language.getMessage(player, "PVP_FFA_KILL_INDICATOR", player.getKiller().getName()));
 				}
 			}
 		}, 20, 20);
-
 	}
 
 	@Override
@@ -65,6 +77,7 @@ public final class FfaArena extends PvpArena {
 			victim.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
 			Util.totemEffect(victim);
 			return;
+
 		} else if (victim.getInventory().getItemInMainHand().getType() == Material.TOTEM_OF_UNDYING) {
 			victim.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 			Util.totemEffect(victim);
@@ -98,7 +111,6 @@ public final class FfaArena extends PvpArena {
 				1F,
 				0.4F
 		));
-
 	}
 
 	private void onFFADeath(final Player victim, final Player killer, final boolean combatLog) {
@@ -119,7 +131,6 @@ public final class FfaArena extends PvpArena {
 		final PlayerData victimData = PlayerDataManager.getPlayerData(victim);
 		final int victimStreak = victimData.getCurrentStreak();
 
-
 		if (victimData.getCurrentStreak() < 10 || killer == null) {
 			if (victim.getKiller() != killer && victim.getKiller() != victim) {
 				victim.setKiller(killer);
@@ -127,11 +138,12 @@ public final class FfaArena extends PvpArena {
 			Bukkit.getPluginManager().callEvent(deathEvent);
 		}
 
-
 		if (!deathEvent.isCancelled()) {
-
 			PlayerDataManager.onFfaDeath(victim);
 			PvpScoreboard.updateFFAListScore(victim);
+
+			final boolean isStarPlayer = isStarPlayer(victim);
+			removeStarPlayer(victim);
 
 			if (victimStreak >= 10) {
 				final Location location = victim.getLocation().add(0, 1, 0);
@@ -140,12 +152,17 @@ public final class FfaArena extends PvpArena {
 				victim.getWorld().spawnParticle(Particle.CLOUD, location, (victimStreak + 1) * 15);
 			}
 
-
 			if (killer != null) {
 				final PlayerData killerData = PlayerDataManager.getPlayerData(killer);
 				final int streak = killerData.getCurrentStreak();
 				PlayerDataManager.onFfaKill(killer, streak + 1);
 				killer.setLevel(streak + 1);
+
+				if (isStarPlayer) {
+					setPlayerStarPlayer(killer);
+					this.broadcast("PVP_FFA_STAR_STOLEN", FlexPlayer.getPlayer(killer).getLegacyDisplayName(), FlexPlayer.getPlayer(victim).getLegacyDisplayName());
+				}
+
 				PvpScoreboard.updateFFAListScore(killer);
 				PvpScoreboard.sendFFASidebarScoreboard(killer);
 
@@ -161,14 +178,23 @@ public final class FfaArena extends PvpArena {
 
 				//Streak break message
 				if (victimStreak >= 10) {
-					this.broadcast("PVP_FFA_STREAK_BREAK", Permissions.getLegacyDisplayName(killer), String.valueOf(victimStreak),  Permissions.getLegacyDisplayName(victim));
+					this.broadcast("PVP_FFA_STREAK_BREAK", FlexPlayer.getPlayer(killer).getLegacyDisplayName(), String.valueOf(victimStreak), FlexPlayer.getPlayer(victim).getLegacyDisplayName());
 				}
 
 				//Streak announcement
 				if ((streak + 1) % 5 == 0) {
 					Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
-						this.broadcast("PVP_FFA_STREAK_ANNOUNCE", Permissions.getLegacyDisplayName(killer), String.valueOf(streak +1));
+						this.broadcast("PVP_FFA_STREAK_ANNOUNCE", FlexPlayer.getPlayer(killer).getLegacyDisplayName(), String.valueOf(streak + 1));
 					}, 20 /* delay just for the aesthetics */);
+				}
+
+				if (!isStarPlayerActive()) {
+					if (streak + 1 >= 2) {
+						if (Bukkit.getOnlinePlayers().size() >= 2) {
+							setPlayerStarPlayer(killer);
+							this.broadcast("PVP_FFA_STAR_GIVEN", FlexPlayer.getPlayer(killer).getLegacyDisplayName());
+						}
+					}
 				}
 			}
 
@@ -217,15 +243,53 @@ public final class FfaArena extends PvpArena {
 		if (causeDeath) {
 			if (player.getKiller() != null && player.getKiller() != player) {
 				onFFADeath(player, player.getKiller(), true);
+			} else {
+				this.broadcast("PVP_FFA_STAR_QUIT", FlexPlayer.getPlayer(player).getLegacyDisplayName());
 			}
 		}
+
+		removeStarPlayer(player);
 		PlayerDataManager.getPlayerData(player).resetCurrentStreak();
 		PvpScoreboard.clearFFAScoreboards(player);
 	}
 
 	@Override
 	void onJoin(final Player player) {
-
 	}
 
+
+	private void setPlayerStarPlayer(final Player player) {
+		if (starPlayerTeam.getSize() == 0) {
+			Permissions.getPlayerPrefix(player).whenCompleteAsync(((prefix, e) -> {
+				if (e != null) {
+					e.printStackTrace();
+				}
+				starPlayerTeam.prefix(Component.join(JoinConfiguration.noSeparators(), MiniMessage.miniMessage().deserialize(prefix.getValue()), Component.text("§e")));
+			}));
+
+			starPlayerTeam.addPlayer(player);
+			player.setGlowing(true);
+		}
+	}
+
+	private boolean isStarPlayer(final Player player) {
+		return starPlayerTeam.hasPlayer(player);
+	}
+
+	private boolean isStarPlayerActive() {
+		return starPlayerTeam.getSize() > 0;
+	}
+
+	private void removeStarPlayer(final Player player) {
+		if (isStarPlayer(player)) {
+			starPlayerTeam.removePlayer(player);
+			FlexPlayer.getPlayer(player).resetPrefix();
+			player.setGlowing(false);
+		}
+	}
+
+	@Override
+	public boolean hasSpawnDelay() {
+		return true;
+	}
 }

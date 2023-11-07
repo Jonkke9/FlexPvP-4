@@ -1,7 +1,8 @@
 package fi.flexplex.pvp.game.arena;
 
+import fi.flexplex.core.api.FlexPlayer;
 import fi.flexplex.core.api.Language;
-import fi.flexplex.core.api.Permissions;
+import fi.flexplex.pvp.Main;
 import fi.flexplex.pvp.misc.BlockDataLocation;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -79,13 +80,11 @@ public final class DuelArenaTemplate {
 		this.name = name;
 
 		for (final UUID uuid : builders) {
-			Permissions.getLegacyDisplayName(Bukkit.getOfflinePlayer(uuid)).whenCompleteAsync((builderName, e)-> {
-				if (e != null) {
-					e.printStackTrace();
-				}
-				this.builderNames.add(builderName);
+			final FlexPlayer flexPlayer = FlexPlayer.getPlayer(uuid);
+			Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+				flexPlayer.waitForComplete();
+				this.builderNames.add(flexPlayer.getLegacyDisplayName());
 			});
-
 		}
 	}
 
