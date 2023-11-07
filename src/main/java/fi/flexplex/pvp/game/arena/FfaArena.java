@@ -189,8 +189,8 @@ public final class FfaArena extends PvpArena {
 				}
 
 				if (!isStarPlayerActive()) {
-					if (streak + 1 >= 2) {
-						if (Bukkit.getOnlinePlayers().size() >= 2) {
+					if (streak + 1 >= 25) {
+						if (Bukkit.getOnlinePlayers().size() >= 5) {
 							setPlayerStarPlayer(killer);
 							this.broadcast("PVP_FFA_STAR_GIVEN", FlexPlayer.getPlayer(killer).getLegacyDisplayName());
 						}
