@@ -48,6 +48,9 @@ public final class FfaArena extends PvpArena {
 		super(name, bounds1, bounds2);
 		this.allowedKits.addAll(allowedKits);
 
+		if (scoreboard.getTeam("000StarPlayer") != null) {
+			scoreboard.getTeam("000StarPlayer").unregister();
+		}
 
 		starPlayerTeam = scoreboard.registerNewTeam("000StarPlayer");
 		starPlayerTeam.suffix(Component.text(" §e✰"));
@@ -244,7 +247,9 @@ public final class FfaArena extends PvpArena {
 			if (player.getKiller() != null && player.getKiller() != player) {
 				onFFADeath(player, player.getKiller(), true);
 			} else {
-				this.broadcast("PVP_FFA_STAR_QUIT", FlexPlayer.getPlayer(player).getLegacyDisplayName());
+				if (isStarPlayer(player)) {
+					this.broadcast("PVP_FFA_STAR_QUIT", FlexPlayer.getPlayer(player).getLegacyDisplayName());
+				}
 			}
 		}
 
