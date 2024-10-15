@@ -172,8 +172,8 @@ public final class Duel implements Listener {
 		Language.sendMessage(killer, "PVP_DUELS_VICTORY", FlexPlayer.getPlayer(player).getLegacyDisplayName());
 		Language.sendMessage(player, "PVP_DUELS_DEFEAT", FlexPlayer.getPlayer(killer).getLegacyDisplayName());
 
-		killer.playSound(Sound.sound(org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, Sound.Source.AMBIENT, 1.0f, 1.0f));
-		player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_BLAZE_DEATH, Sound.Source.AMBIENT, 1.0f, 1.0f));
+		killer.playSound(killer.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
+		player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_BLAZE_DEATH, 1.0f, 1.0f);
 
 		new BukkitRunnable() {
 			int count = 1;
@@ -181,7 +181,7 @@ public final class Duel implements Listener {
 			@Override
 			public void run() {
 				final Location loc = killer.getLocation();
-				final Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+				final Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK_ROCKET);
 				final FireworkMeta fwm = fw.getFireworkMeta();
 				fwm.setPower(1);
 				fwm.addEffect(FireworkEffect.builder().withColor(Color.ORANGE).withColor(Color.YELLOW).withFade(Color.YELLOW).withTrail().build());

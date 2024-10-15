@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Iterator;
 
-public class DuelArenaBuildTask extends BukkitRunnable {
+public final class DuelArenaBuildTask extends BukkitRunnable {
 
 	private final Location loc;
 	private final World world;

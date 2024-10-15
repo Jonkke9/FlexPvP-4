@@ -17,10 +17,12 @@ import fi.flexplex.pvp.loader.ArenaLoader;
 import fi.flexplex.pvp.loader.ConfigLoader;
 import fi.flexplex.pvp.loader.KitLoader;
 import fi.flexplex.pvp.misc.world.WorldUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 

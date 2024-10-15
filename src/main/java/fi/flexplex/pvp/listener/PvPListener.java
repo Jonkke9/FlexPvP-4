@@ -57,7 +57,7 @@ public final class PvPListener implements Listener {
 	@EventHandler
 	public void onEntityLoadCrossbow(final EntityLoadCrossbowEvent event) {
 		if (event.getCrossbow().hasItemMeta()
-				&& event.getCrossbow().getItemMeta().hasEnchant(Enchantment.ARROW_INFINITE)) {
+				&& event.getCrossbow().getItemMeta().hasEnchant(Enchantment.INFINITY)) {
 
 			event.setConsumeItem(false);
 		}
