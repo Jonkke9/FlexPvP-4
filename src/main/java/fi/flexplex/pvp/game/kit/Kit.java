@@ -52,7 +52,6 @@ public final class Kit {
 
 	private final Collection<PotionEffect> potionEffects;
 
-
 	public void deploy(final Player player) {
 		Util.resetPlayer(player);
 		final Inventory inv = player.getInventory();

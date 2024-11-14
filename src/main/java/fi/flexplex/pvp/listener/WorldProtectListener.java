@@ -1,6 +1,9 @@
 package fi.flexplex.pvp.listener;
 
 import fi.flexplex.core.util.PermissionNodes;
+import fi.flexplex.pvp.game.arena.DuelArena;
+import fi.flexplex.pvp.game.playerdata.PlayerData;
+import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -21,16 +24,24 @@ public class WorldProtectListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		if (!event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT)) {
+		final Player player = event.getPlayer();
+		final PlayerData data = PlayerDataManager.getPlayerData(player);
+
+		if (!event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT) || event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 			event.setCancelled(true);
+		}
+
+		if (data.getArena() instanceof final DuelArena arena) {
+			if (arena.canBlockBeChanged(event.getBlock().getLocation())) {
+				event.setCancelled(false);
+			}
 		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event) {
-		if (!event.getPlayer().hasPermission(PermissionNodes.WORLDPROTECT) || event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-			event.setCancelled(true);
-		}
+		event.setCancelled(true);
+		event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation()).setBlockData(event.getBlockPlaced().getBlockData(), false);
 	}
 
 	@EventHandler(ignoreCancelled = true)

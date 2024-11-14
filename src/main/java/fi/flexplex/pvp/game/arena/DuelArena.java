@@ -11,18 +11,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public final class DuelArena extends PvpArena{
 
 	private final Location[] locations;
 	private final DuelArenaTemplate template;
 	private Duel activeDuel;
-
+	private Set<Location> changedBlocks;
 	private boolean ready;
 
 	public DuelArena(final String name, final Location bounds1, final Location bounds2, final Location[] locations, final DuelArenaTemplate template) {
 		super(name, bounds1, bounds2);
 		this.template = template;
 		this.locations = locations;
+		changedBlocks = new HashSet<>();
 		activeDuel = null;
 		ready = false;
 	}
@@ -106,6 +110,35 @@ public final class DuelArena extends PvpArena{
 
 	public DuelArenaTemplate getTemplate() {
 		return template;
+	}
+
+	private arenaBlockCoordinate getCentralizedCoords(final Location location) {
+		return new arenaBlockCoordinate(location.getBlockX() - bounds1.getBlockX(), location.getBlockY() - bounds1.getBlockY(), location.getBlockZ() - bounds1.getBlockZ());
+	}
+
+	public boolean canBlockBeChanged(final Location loc) {
+		if (!isInBounds(loc)) {
+			return false;
+		}
+
+		final arenaBlockCoordinate coords = getCentralizedCoords(loc);
+
+		return getTemplate().canBuild(coords.x, coords.y, coords.z);
+
+	}
+
+	private class arenaBlockCoordinate {
+		final int x, y, z;
+
+		private arenaBlockCoordinate(final int x, final int y, final int z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+	}
+
+	public void onBlockChange(final Location location) {
+		changedBlocks.add(location);
 	}
 
 }

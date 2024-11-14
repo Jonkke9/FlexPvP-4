@@ -80,25 +80,4 @@ public final class Util {
 		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 45 * 20, 2));
 		player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40 * 20, 1));
 	}
-
-	public static boolean isInArea(final Location loc, final Location pos1, final Location pos2) {
-		final Location smallestCorner = new Location(loc.getWorld(),
-				Math.min(pos1.getX(), pos2.getX()),
-				Math.min(pos1.getY(), pos2.getY()),
-				Math.min(pos1.getZ(), pos2.getZ())
-		);
-
-		final Location largestCorner = new Location(loc.getWorld(),
-				Math.max(pos1.getX(), pos2.getX()),
-				Math.max(pos1.getY(), pos2.getY()),
-				Math.max(pos1.getZ(), pos2.getZ())
-		);
-
-		if (smallestCorner.getX() <= loc.getX() && loc.getX() <= largestCorner.getX() &&
-				(smallestCorner.getY() <= loc.getY() && loc.getY() <= largestCorner.getY()) &&
-				(smallestCorner.getZ() <= loc.getZ() && loc.getZ() <= largestCorner.getZ())) {
-			return true;
-		}
-		return false;
-	}
 }

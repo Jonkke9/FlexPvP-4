@@ -22,8 +22,6 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -122,7 +120,6 @@ public final class FfaArena extends PvpArena {
 
 		final PlayerDeathEvent deathEvent = new PlayerDeathEvent(
 				victim,
-				DamageSource.builder(DamageType.GENERIC_KILL).build(),
 				Collections.emptyList(),
 				0,
 				""
@@ -145,7 +142,6 @@ public final class FfaArena extends PvpArena {
 		}
 
 		if (!deathEvent.isCancelled()) {
-
 			PlayerDataManager.onFfaDeath(victim);
 			PvpScoreboard.updateFFAListScore(victim);
 
@@ -165,13 +161,13 @@ public final class FfaArena extends PvpArena {
 				PlayerDataManager.onFfaKill(killer, streak + 1);
 				killer.setLevel(streak + 1);
 
-				PvpScoreboard.updateFFAListScore(killer);
-				PvpScoreboard.sendFFASidebarScoreboard(killer);
-
 				if (isStarPlayer) {
 					setPlayerStarPlayer(killer);
 					this.broadcast("PVP_FFA_STAR_STOLEN", FlexPlayer.getPlayer(killer).getLegacyDisplayName(), FlexPlayer.getPlayer(victim).getLegacyDisplayName());
 				}
+
+				PvpScoreboard.updateFFAListScore(killer);
+				PvpScoreboard.sendFFASidebarScoreboard(killer);
 
 				final double max = killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 

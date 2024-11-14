@@ -6,147 +6,157 @@ import fi.flexplex.pvp.game.arena.ArenaManager;
 import fi.flexplex.pvp.game.playerdata.PlayerData;
 import fi.flexplex.pvp.game.playerdata.PlayerDataManager;
 import fi.flexplex.pvp.misc.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.numbers.NumberFormat;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundSetDisplayObjectivePacket;
-import net.minecraft.network.protocol.game.ClientboundSetObjectivePacket;
-import net.minecraft.network.protocol.game.ClientboundSetScorePacket;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardDisplayObjective;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardObjective;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardScore;
+import net.minecraft.server.ScoreboardServer;
 import net.minecraft.world.scores.DisplaySlot;
-import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
-import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+import net.minecraft.world.scores.ScoreboardObjective;
+import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.DecimalFormat;
-import java.util.Optional;
 
 public final class PvpScoreboard {
 	private static final Scoreboard scoreboard = new Scoreboard();
 
-	private static final Optional<NumberFormat> EMPTY = Optional.empty();
-
 	public static void sendFFASidebarScoreboard(final Player p) {
-		final PlayerData data = PlayerDataManager.getPlayerData(p);
-		final Objective obj = new Objective(scoreboard, "FFA_SIDE", ObjectiveCriteria.DUMMY, Component.empty(), ObjectiveCriteria.RenderType.INTEGER, false, null);
-		obj.setDisplayName(Component.literal(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TITLE")));
-		
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 1));
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 0));
-		sendPacket(p, new ClientboundSetDisplayObjectivePacket(DisplaySlot.SIDEBAR, obj));
+		try {
+			final PlayerData data = PlayerDataManager.getPlayerData(p);
+			final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "FFA_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			obj.a(IChatBaseComponent.a(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TITLE")));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 1));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 0));
+			sendPacket(p, new PacketPlayOutScoreboardDisplayObjective(DisplaySlot.b, obj));
 
-		sendPacket(p, new ClientboundSetScorePacket("SPACER", "FFA_SIDE", 5, Optional.of(Component.literal("§8 ")), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("KILLS", "FFA_SIDE", 4, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_KILLS", String.valueOf(data.getKills())))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("DEATHS", "FFA_SIDE", 3, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_DEATHS", String.valueOf(data.getDeaths())))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("KDR", "FFA_SIDE", 2, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_KD", new DecimalFormat("#.##").format(data.getKD())))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("STREAK", "FFA_SIDE", 1, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TOP_STREAK", String.valueOf(data.getTopStreak())))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("TIMEFRAME", "FFA_SIDE", 0, Optional.of(Component.literal(getTimeFrameText(data))), EMPTY));
-
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", "§8 ", 5));
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_KILLS", String.valueOf(data.getKills())), 4));
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_DEATHS", String.valueOf(data.getDeaths())), 3));
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_KD", new DecimalFormat("#.##").format(data.getKD())), 2));
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TOP_STREAK", String.valueOf(data.getTopStreak())), 1));
+			sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_SIDE", getTimeFrameText(data), 0));
+		} catch (Exception | Error e) {
+		}
 	}
 
-	public static void sendDuelsSidebarScoreboard(final Player p, final Player opponent, final int points1, final int points2, final String arenaname) {
-		final Objective obj = new Objective(scoreboard, "DUELS_SIDE", ObjectiveCriteria.DUMMY, Component.empty(), ObjectiveCriteria.RenderType.INTEGER, false, null);
-		obj.setDisplayName(Component.literal(Language.getStringMessage(p, "PVP_DUELS_SCOREBOARD_TITLE")));
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 1));
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 0));
-		sendPacket(p, new ClientboundSetDisplayObjectivePacket(DisplaySlot.SIDEBAR, obj));
 
-		sendPacket(p, new ClientboundSetScorePacket("SPACER1", "DUELS_SIDE", 10, Optional.of(Component.literal("§8§l  ")), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("SPACER2", "DUELS_SIDE", 9, Optional.of(Component.literal("§8§l  ")), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("ROUND", "DUELS_SIDE", 8, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_DUELS_SCOREBOARD_ROUND", String.valueOf(points1 + points2 + 1)))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("POINTS", "DUELS_SIDE", 7, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_DUELS_SCOREBOARD_POINTS", String.valueOf(points1), String.valueOf(points2)))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("SPACER3", "DUELS_SIDE", 6, Optional.of(Component.literal("§8§l  ")), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("PLAYER", "DUELS_SIDE", 5, Optional.of(Component.literal(FlexPlayer.getPlayer(p).getLegacyDisplayName())), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("VS", "DUELS_SIDE", 4, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_DUELS_SCOREBOARD_VERSUS"))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("OPPONENT", "DUELS_SIDE", 3, Optional.of(Component.literal(FlexPlayer.getPlayer(opponent).getLegacyDisplayName())), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("SPACER4", "DUELS_SIDE", 2, Optional.of(Component.literal("§8 ")), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("ARENA", "DUELS_SIDE", 1, Optional.of(Component.literal(Language.getStringMessage(p, "PVP_DUELS_SCOREBOARD_ARENA"))), EMPTY));
-		sendPacket(p, new ClientboundSetScorePacket("ARENA_NAME", "DUELS_SIDE", 0,  Optional.of(Component.literal("§7 " + arenaname)), EMPTY));
+	public static void sendDuelsSidebarScoreboard(final Player player, final Player opponent, final int points1, final int points2, final String arenaname) {
+		try {
+			final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "DUELS_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			obj.a(IChatBaseComponent.a(Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_TITLE")));
+			sendPacket(player, new PacketPlayOutScoreboardObjective(obj, 1));
+			sendPacket(player, new PacketPlayOutScoreboardObjective(obj, 0));
+			sendPacket(player, new PacketPlayOutScoreboardDisplayObjective(DisplaySlot.b, obj));
+
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8§l  ", 10));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8§l  ", 9));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_ROUND", String.valueOf(points1 + points2 + 1)), 8));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_POINTS", String.valueOf(points1), String.valueOf(points2)), 7));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8§l  ", 6));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", FlexPlayer.getPlayer(player).getLegacyDisplayName(), 5));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_VERSUS"), 4));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", FlexPlayer.getPlayer(opponent).getLegacyDisplayName(), 3));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§8 ", 2));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", Language.getStringMessage(player, "PVP_DUELS_SCOREBOARD_ARENA"), 1));
+			sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "DUELS_SIDE", "§7" + arenaname, 0));
+		} catch (Exception | Error e) {
+		}
 	}
 
 	public static void sendFFABellowNameScoreboard(final Player p) {
-		final Objective obj = new Objective(scoreboard, "FFA_BELLOW_NAME", ObjectiveCriteria.HEALTH, Component.literal("§c❤"), ObjectiveCriteria.RenderType.HEARTS, false, null);
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 1));
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 0));
-		sendPacket(p, new ClientboundSetDisplayObjectivePacket(DisplaySlot.BELOW_NAME, obj));
-		
-		for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
-			sendPacket(player, new ClientboundSetScorePacket(p.getName(),"FFA_BELLOW_NAME", (int) p.getHealth(), Optional.empty(), EMPTY));
-			sendPacket(p, new ClientboundSetScorePacket(player.getName(), "FFA_BELLOW_NAME", (int) player.getHealth(), Optional.empty(), EMPTY));
+		try {
+			final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "FFA_BELLOW_NAME", IScoreboardCriteria.a, IChatBaseComponent.a("§c❤"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 1));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 0));
+			sendPacket(p, new PacketPlayOutScoreboardDisplayObjective(DisplaySlot.c, obj));
+
+			for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
+				sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", p.getName(), (int) p.getHealth()));
+				sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", player.getName(), (int) player.getHealth()));
+			}
+		} catch (Exception | Error e) {
 		}
 	}
 
 	public static void updateFFABellowNameScoreboard(final Player p, final int health) {
-		for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
-			sendPacket(player, new ClientboundSetScorePacket(p.getName(), "FFA_BELLOW_NAME", health, Optional.empty(), Optional.empty()));
+		try {
+			for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
+				sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_BELLOW_NAME", p.getName(), health));
+			}
+		} catch (Exception | Error e) {
 		}
 	}
 
 	public static void sendFFAListScoreboard(final Player p) {
-		final Objective obj = new Objective(scoreboard, "FFA_TAB", ObjectiveCriteria.DUMMY, Component.literal("FlexPvP"), ObjectiveCriteria.RenderType.INTEGER, false, null);
-		obj.setDisplayName(Component.literal(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TITLE")));
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 1));
-		sendPacket(p, new ClientboundSetObjectivePacket(obj, 0));
-		sendPacket(p, new ClientboundSetDisplayObjectivePacket(DisplaySlot.LIST, obj));
+		try {
+			final ScoreboardObjective obj = new ScoreboardObjective(scoreboard, "FFA_TAB", IScoreboardCriteria.a, IChatBaseComponent.a("FlexPvP"), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			obj.a(IChatBaseComponent.a(Language.getStringMessage(p, "PVP_FFA_SCOREBOARD_TITLE")));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 1));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(obj, 0));
+			sendPacket(p, new PacketPlayOutScoreboardDisplayObjective(DisplaySlot.a, obj));
 
-		for (final Player player : Bukkit.getOnlinePlayers()) {
-			sendPacket(p, new ClientboundSetScorePacket(player.getName(), "FFA_TAB", PlayerDataManager.getPlayerData(player).getCurrentStreak(),  Optional.empty(), EMPTY));
+			for (final Player player : Bukkit.getOnlinePlayers()) {
+				sendPacket(p, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_TAB", player.getName(), PlayerDataManager.getPlayerData(player).getCurrentStreak()));
+			}
+		} catch (Exception | Error e) {
 		}
 	}
 
 	public static void updateFFAListScore(final Player p) {
-		final int streak = PlayerDataManager.getPlayerData(p).getCurrentStreak();
-		for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
-			sendPacket(player, new ClientboundSetScorePacket(p.getName(), "FFA_TAB" ,streak, Optional.empty(), Optional.empty()));
+		try {
+			final int streak = PlayerDataManager.getPlayerData(p).getCurrentStreak();
+			for (final Player player : ArenaManager.getFfaArena().getPlayers()) {
+				sendPacket(player, new PacketPlayOutScoreboardScore(ScoreboardServer.Action.a, "FFA_TAB", p.getName(), streak));
+			}
+		} catch (Exception | Error e) {
 		}
 	}
 
 	public static void clearFFAScoreboards(final Player p) {
-		final Objective side = new Objective(scoreboard, "FFA_SIDE", ObjectiveCriteria.DUMMY, Component.empty(), ObjectiveCriteria.RenderType.INTEGER, false, null);
-		final Objective list = new Objective(scoreboard, "FFA_TAB", ObjectiveCriteria.DUMMY, Component.empty(), ObjectiveCriteria.RenderType.INTEGER, false, null);
-		final Objective bellowName = new Objective(scoreboard, "FFA_BELLOW_NAME", ObjectiveCriteria.DUMMY, Component.empty(), ObjectiveCriteria.RenderType.INTEGER, false, null);
+		try {
+			final ScoreboardObjective side = new ScoreboardObjective(scoreboard, "FFA_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			final ScoreboardObjective list = new ScoreboardObjective(scoreboard, "FFA_TAB", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			final ScoreboardObjective bellowName = new ScoreboardObjective(scoreboard, "FFA_BELLOW_NAME", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
 
-		sendPacket(p, new ClientboundSetObjectivePacket(side, 1));
-		sendPacket(p, new ClientboundSetObjectivePacket(list, 1));
-		sendPacket(p, new ClientboundSetObjectivePacket(bellowName, 1));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(side, 1));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(list, 1));
+			sendPacket(p, new PacketPlayOutScoreboardObjective(bellowName, 1));
+		} catch (Exception | Error e) {
+		}
 	}
 
 	public static void clearDuelsScoreboards(final Player p) {
-		final Objective side = new Objective(scoreboard, "DUELS_SIDE",  ObjectiveCriteria.DUMMY, Component.empty(), ObjectiveCriteria.RenderType.INTEGER, false, null);
-		sendPacket(p, new ClientboundSetObjectivePacket(side, 1));
+		try {
+			final ScoreboardObjective side = new ScoreboardObjective(scoreboard, "DUELS_SIDE", IScoreboardCriteria.a, IChatBaseComponent.a(""), IScoreboardCriteria.EnumScoreboardHealthDisplay.a);
+			sendPacket(p, new PacketPlayOutScoreboardObjective(side, 1));
+		} catch (Exception | Error e) {
+		}
 	}
 
 	private static String getTimeFrameText(final PlayerData playerData) {
 		String string = " ";
 		switch (playerData.timeFrame()) {
-			case THIS_SESSION ->
+			case THIS_SESSION -> {
 				string = Language.getStringMessage(playerData.player(), "PVP_STAT_TIMEFRAME_THIS_SESSION");
-
-			case MONTHLY ->
+			}
+			case MONTHLY -> {
 				string = Language.getStringMessage(playerData.player(), Util.getCurrentMonthKey()) + " " + Util.getYear();
-
-			case ALL_TIME ->
+			}
+			case ALL_TIME -> {
 				string = Language.getStringMessage(playerData.player(), "PVP_STAT_TIMEFRAME_ALL_TIME");
+			}
 		}
 		return "§8(" + string + ")";
 	}
 
 	private static void sendPacket(final Player player, final Packet<?> packet) {
-		try {
-			final Method getHandle = player.getClass().getDeclaredMethod("getHandle");
-			final Object handle = getHandle.invoke(player);
-			final Field playerConnectionField = handle.getClass().getDeclaredField("connection");
-			final Object playerConnection = playerConnectionField.get(handle);
-			final Method sendPacket = playerConnection.getClass().getMethod("sendPacket", Packet.class);
-			sendPacket.invoke(playerConnection, packet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
+		((CraftPlayer) player).getHandle().c.b(packet);
+	}
 }
 
 

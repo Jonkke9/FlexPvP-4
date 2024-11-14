@@ -31,6 +31,7 @@ public final class DuelArenaTemplate {
 	private final Material displayMaterial;
 	private final Set<BlockDataLocation> blocks;
 	private final Location[] normalizedLocations;
+	private final boolean[][][] blockMask;
 
 	public DuelArenaTemplate(final int amount,
 							 final String name,
@@ -55,6 +56,7 @@ public final class DuelArenaTemplate {
 		);
 
 		final Set<BlockDataLocation> blocks1 = new HashSet<>();
+		final boolean[][][] mask = new boolean[sizeX][sizeY][sizeZ];
 
 		for (int i = 0; i < sizeX; i++) {
 			for (int j = 0; j < sizeY; j++) {
@@ -62,6 +64,7 @@ public final class DuelArenaTemplate {
 					final BlockData data = world.getBlockData(smallest.getBlockX() + i, smallest.getBlockY() + j, smallest.getBlockZ() + k);
 					if (data.getMaterial() != null && data.getMaterial() != Material.AIR) {
 						blocks1.add(new BlockDataLocation(data, i, j, k));
+						mask[i][j][k] = true;
 					}
 				}
 			}
@@ -75,6 +78,7 @@ public final class DuelArenaTemplate {
 		this.displayMaterial = displayMaterial;
 		this.displayNameKey = displayNameKey;
 		this.builderNames = new ArrayList<>();
+		this.blockMask = mask;
 		this.blocks = blocks1;
 		this.amount = amount;
 		this.name = name;
@@ -159,6 +163,12 @@ public final class DuelArenaTemplate {
 		return icon;
 	}
 
+	public boolean canBuild(final int x, final int y, final  int z) {
+		if ((0 <= x && x < sizeX) && (0 <= y && y < sizeY) && (0 <= z && z < sizeZ)) {
+			return blockMask[x][y][z];
+		}
+		return false;
+	}
 }
 
 

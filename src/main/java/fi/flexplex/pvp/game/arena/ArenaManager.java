@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public final class ArenaManager {
+public class ArenaManager {
 
 	private static final HashMap<String, Arena> ARENAS = new HashMap<>();
 	private static final HashMap<String, DuelArenaTemplate> TEMPLATES = new HashMap<>();

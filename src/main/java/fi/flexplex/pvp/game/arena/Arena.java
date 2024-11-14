@@ -5,7 +5,6 @@ import fi.flexplex.pvp.misc.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -79,8 +78,29 @@ public abstract class Arena {
 	public Location getBounds2() {
 		return bounds2;
 	}
-
+	
 	public boolean hasSpawnDelay() {
+		return false;
+	}
+
+	public boolean isInBounds(final Location loc) {
+		final Location smallestCorner = new Location(loc.getWorld(),
+				Math.min(bounds1.getX(), bounds2.getX()),
+				Math.min(bounds1.getY(), bounds2.getY()),
+				Math.min(bounds1.getZ(), bounds2.getZ())
+		);
+
+		final Location largestCorner = new Location(loc.getWorld(),
+				Math.max(bounds1.getX(), bounds2.getX()),
+				Math.max(bounds1.getY(), bounds2.getY()),
+				Math.max(bounds1.getZ(), bounds2.getZ())
+		);
+
+		if (smallestCorner.getX() <= loc.getX() && loc.getX() <= largestCorner.getX() &&
+				(smallestCorner.getY() <= loc.getY() && loc.getY() <= largestCorner.getY()) &&
+				(smallestCorner.getZ() <= loc.getZ() && loc.getZ() <= largestCorner.getZ())) {
+			return true;
+		}
 		return false;
 	}
 
